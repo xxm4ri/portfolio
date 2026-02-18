@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Dev Parkour Portfolio</title>
+    <title>Java Dev Parkour Portfolio - Fast & Mouse Look</title>
     <style>
         body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Roboto, sans-serif; background-color: #1a0033; }
         canvas { display: block; }
@@ -16,6 +16,9 @@
             color: #d8b4fe;
             pointer-events: none;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
         }
 
         /* Tela de Vitória e Habilidades */
@@ -82,11 +85,13 @@
 
     <div id="gui">
         <h1>Dev Parkour</h1>
-        <p>Use <b>WASD</b> ou <b>Setas</b> para mover</p>
-        <p>Pressione <b>ESPAÇO</b> para pular</p>
+        <p><b>CLIQUE NA TELA PARA COMEÇAR</b></p>
+        <p>Mouse: Girar Câmera</p>
+        <p>WASD: Mover Rápido</p>
+        <p>ESPAÇO: Pulo Alto</p>
     </div>
 
-    <div id="win-screen" id="winScreen">
+    <div id="win-screen">
         <h2 style="color: #ffd700;">⭐ OBBY CONCLUÍDO! ⭐</h2>
         <p>Habilidade Master:</p>
         <div class="skill-tag">JAVA</div>
@@ -114,24 +119,54 @@
         // --- CENA E RENDERER ---
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x130026);
-        scene.fog = new THREE.Fog(0x130026, 10, 50);
+        scene.fog = new THREE.Fog(0x130026, 10, 60);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
         document.body.appendChild(renderer.domElement);
 
-        // --- FÍSICA ---
-        const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -20, 0) });
+        // --- CONTROLE DE MOUSE (POINTER LOCK) ---
+        let isLocked = false;
+        let yaw = 0; // Rotação Horizontal (Corpo)
+        let pitch = 0; // Rotação Vertical (Câmera)
 
-        // --- PERSONAGEM (Pessoinha Estilo Obby) ---
+        document.body.addEventListener('click', () => {
+            document.body.requestPointerLock();
+        });
+
+        document.addEventListener('pointerlockchange', () => {
+            isLocked = document.pointerLockElement === document.body;
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (!isLocked) return;
+
+            // Sensibilidade
+            const sensitivity = 0.002;
+            
+            // Atualiza rotação baseada no movimento do mouse
+            yaw -= event.movementX * sensitivity;
+            pitch -= event.movementY * sensitivity;
+
+            // Limita o olhar para cima/baixo (não dar cambalhota com o pescoço)
+            pitch = Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, pitch));
+        });
+
+        // --- FÍSICA ---
+        // Aumentei a gravidade para cair mais rápido (pulo mais responsivo)
+        const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -30, 0) });
+
+        // --- PERSONAGEM ---
         const playerGroup = new THREE.Group();
         
-        // Corpo
+        // Corpo Visual
         const bodyGeo = new THREE.CapsuleGeometry(0.4, 0.8, 4, 8);
         const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
         const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+        bodyMesh.castShadow = true;
         playerGroup.add(bodyMesh);
 
         // Cabeça
@@ -140,7 +175,14 @@
         headMesh.position.y = 0.8;
         playerGroup.add(headMesh);
 
-        // Detalhe Lilás no Peito
+        // Óculos/Visor (para saber onde está olhando)
+        const visorGeo = new THREE.BoxGeometry(0.4, 0.1, 0.2);
+        const visorMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+        const visor = new THREE.Mesh(visorGeo, visorMat);
+        visor.position.set(0, 0.8, -0.25); // Na frente da cara
+        playerGroup.add(visor);
+
+        // Detalhe Lilás
         const stripeGeo = new THREE.BoxGeometry(0.5, 0.1, 0.5);
         const stripeMat = new THREE.MeshStandardMaterial({ color: 0xbf77f6 });
         const stripe = new THREE.Mesh(stripeGeo, stripeMat);
@@ -149,39 +191,44 @@
 
         scene.add(playerGroup);
 
+        // Corpo Físico
         const playerPhysBody = new CANNON.Body({
             mass: 1,
             shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.9, 0.4)),
             position: new CANNON.Vec3(0, 5, 0),
-            fixedRotation: true
+            fixedRotation: true // Importante: a física não gira, nós giramos a velocidade
         });
+        playerPhysBody.linearDamping = 0.9; // Ajuda a parar rápido quando solta a tecla
         world.addBody(playerPhysBody);
 
         // --- ILUMINAÇÃO ---
         const sun = new THREE.DirectionalLight(0xffffff, 1.5);
-        sun.position.set(5, 15, 10);
+        sun.position.set(10, 20, 10);
+        sun.castShadow = true;
         scene.add(sun);
-        scene.add(new THREE.AmbientLight(0xbf77f6, 0.5));
+        scene.add(new THREE.AmbientLight(0xbf77f6, 0.6));
 
-        // --- PLATAFORMAS (FÁCEIS) ---
-        function addPlatform(x, y, z, w, color = 0x8a2be2) {
-            const geo = new THREE.BoxGeometry(w, 0.8, 6);
-            const mat = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.2 });
+        // --- PLATAFORMAS ---
+        function addPlatform(x, y, z, w, d, color = 0x8a2be2) {
+            const geo = new THREE.BoxGeometry(w, 1, d);
+            const mat = new THREE.MeshStandardMaterial({ color: color });
             const mesh = new THREE.Mesh(geo, mat);
             mesh.position.set(x, y, z);
+            mesh.receiveShadow = true;
             scene.add(mesh);
 
-            const shape = new CANNON.Box(new CANNON.Vec3(w/2, 0.4, 3));
+            const shape = new CANNON.Box(new CANNON.Vec3(w/2, 0.5, d/2));
             const body = new CANNON.Body({ mass: 0, shape: shape });
             body.position.set(x, y, z);
             world.addBody(body);
         }
 
-        // Percurso fácil e largo
-        addPlatform(0, 0, 0, 8);        // Início
-        addPlatform(0, 2, -10, 8);      // Meio 1
-        addPlatform(5, 4, -20, 8);      // Meio 2
-        addPlatform(0, 6, -30, 10, 0xffd700); // Fim Dourado
+        // Percurso (Alongado para velocidade maior)
+        addPlatform(0, -1, 0, 10, 10);          // Base Inicial
+        addPlatform(0, 1, -15, 6, 6);           // Pulo 1
+        addPlatform(-8, 3, -25, 6, 6);          // Pulo 2 (Esquerda)
+        addPlatform(0, 5, -35, 6, 6);           // Pulo 3 (Volta pro meio)
+        addPlatform(0, 7, -50, 15, 10, 0xffd700); // Fim Dourado
 
         // --- CONTROLES ---
         const keys = {};
@@ -193,43 +240,83 @@
         function update() {
             world.fixedStep();
 
-            // Sincronizar visual
+            // 1. Sincronizar rotação visual do personagem com o Mouse (Yaw)
+            playerGroup.rotation.y = yaw;
             playerGroup.position.copy(playerPhysBody.position);
 
-            // Movimento
-            const speed = 7;
-            let moveZ = 0;
-            let moveX = 0;
+            // 2. Movimento Relativo à Câmera
+            // Velocidade bem maior como pedido (20)
+            const speed = 20; 
+            
+            let inputForward = 0;
+            let inputSide = 0;
 
-            if (keys['KeyW'] || keys['ArrowUp']) moveZ = -speed;
-            if (keys['KeyS'] || keys['ArrowDown']) moveZ = speed;
-            if (keys['KeyA'] || keys['ArrowLeft']) moveX = -speed;
-            if (keys['KeyD'] || keys['ArrowRight']) moveX = speed;
+            if (keys['KeyW'] || keys['ArrowUp']) inputForward = -1;
+            if (keys['KeyS'] || keys['ArrowDown']) inputForward = 1;
+            if (keys['KeyA'] || keys['ArrowLeft']) inputSide = -1;
+            if (keys['KeyD'] || keys['ArrowRight']) inputSide = 1;
 
-            playerPhysBody.velocity.z = moveZ;
-            playerPhysBody.velocity.x = moveX;
+            if (inputForward !== 0 || inputSide !== 0) {
+                // Matemática para calcular direção baseada no ângulo YAW
+                // Basicamente: "Para onde meu nariz aponta é o Forward"
+                const direction = yaw;
+                
+                // Calcula os vetores de velocidade
+                // Forward (W/S) afeta Z e X baseado no seno/cosseno do angulo
+                const velZ = (Math.cos(direction) * inputForward * speed) + (Math.cos(direction + Math.PI/2) * inputSide * speed);
+                const velX = (Math.sin(direction) * inputForward * speed) + (Math.sin(direction + Math.PI/2) * inputSide * speed);
 
-            // Pulo (Só pula se estiver em contato com algo)
-            if (keys['Space'] && Math.abs(playerPhysBody.velocity.y) < 0.1) {
-                playerPhysBody.velocity.y = 12;
+                playerPhysBody.velocity.x = -velX; 
+                playerPhysBody.velocity.z = -velZ;
+            } else {
+                // Parar se não tiver input
+                playerPhysBody.velocity.x = 0;
+                playerPhysBody.velocity.z = 0;
             }
 
-            // Fall Reset
-            if (playerPhysBody.position.y < -10) {
+            // 3. Pulo
+            if (keys['Space']) {
+                // Raycast simples para ver se está no chão
+                // (Para simplificar, permitimos pular se a velocidade Y for quase zero)
+                if(Math.abs(playerPhysBody.velocity.y) < 0.1) {
+                    playerPhysBody.velocity.y = 15; // Força do pulo
+                }
+            }
+
+            // 4. Reset se cair
+            if (playerPhysBody.position.y < -20) {
                 playerPhysBody.position.set(0, 5, 0);
                 playerPhysBody.velocity.set(0, 0, 0);
+                // Reseta rotação também para não ficar confuso
+                yaw = 0;
+                pitch = 0;
             }
 
-            // Win Condition
-            if (!won && playerPhysBody.position.z < -28 && playerPhysBody.position.y > 5.5) {
+            // 5. Condição de Vitória
+            if (!won && playerPhysBody.position.z < -45 && playerPhysBody.position.y > 6) {
                 won = true;
                 document.getElementById('win-screen').classList.add('active');
+                document.exitPointerLock(); // Solta o mouse pra clicar no botão
+                isLocked = false;
             }
 
-            // Suavização da Câmera
-            const offset = new THREE.Vector3(0, 6, 12);
-            camera.position.lerp(playerGroup.position.clone().add(offset), 0.1);
-            camera.lookAt(playerGroup.position);
+            // 6. Câmera em Terceira Pessoa (Orbita baseada no Pitch/Yaw)
+            // Distância da câmera
+            const camDist = 6;
+            const camHeight = 2;
+
+            // Posição alvo da câmera:
+            // Pega a posição do player
+            // Adiciona um offset calculado por trigonometria esférica (Pitch/Yaw)
+            const camX = playerGroup.position.x + camDist * Math.sin(yaw) * Math.cos(pitch);
+            const camZ = playerGroup.position.z + camDist * Math.cos(yaw) * Math.cos(pitch);
+            const camY = playerGroup.position.y + camHeight + (camDist * Math.sin(pitch));
+
+            // Suavização (Lerp) para a câmera não ser dura demais
+            camera.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.1);
+            
+            // A câmera olha sempre para a cabeça do jogador
+            camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1, playerGroup.position.z);
         }
 
         function render() {
