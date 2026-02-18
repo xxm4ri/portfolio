@@ -1,636 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foguete Java · Portfólio Explosivo</title>
-    <!-- Fonte elegante e moderna -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Folha de estilo principal -->
+    <title>Dev Portfolio | Java Expert</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Space Grotesk', sans-serif;
-            color: white;
-            background-color: #0a0f1e;
-        }
+        body { margin: 0; overflow-x: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #050505; color: white; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* Canvas Three.js ocupa fundo inteiro */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-        }
+        /* Overlay Content */
+        .content { position: relative; z-index: 1; padding: 2rem; }
+        
+        header { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(0,0,0,0.2); }
+        
+        h1 { font-size: 4rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 5px; color: #00d4ff; }
+        .java-badge { background: #f89820; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
 
-        /* Conteúdo sobreposto com glassmorphism */
-        .content {
-            position: absolute;
-            z-index: 10;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            pointer-events: none; /* permite clicar através do conteúdo se necessário, mas botoes precisam ser clicáveis */
-        }
+        section { padding: 100px 10% ; min-height: 80vh; }
+        
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .skill-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; }
+        .skill-card:hover { transform: translateY(-10px); border-color: #00d4ff; }
 
-        /* Cada seção tem pointer-events auto para interação */
-        header, .skills-section, .projects-section, footer {
-            pointer-events: auto;
-        }
-
-        /* Header com nome e animação suave */
-        header {
-            padding: 2rem 3rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            background: rgba(10, 20, 30, 0.3);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 140, 0, 0.3);
-            box-shadow: 0 0 30px rgba(255, 100, 0, 0.2);
-        }
-
-        .logo h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(135deg, #ffaa33, #ff6b4a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px #ff5e00;
-        }
-
-        .logo span {
-            font-size: 1rem;
-            font-weight: 300;
-            color: #ccc;
-            letter-spacing: 4px;
-            margin-left: 8px;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-            position: relative;
-            padding-bottom: 5px;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: #ff9933;
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Container principal para destaque das skills + espaço projetos */
-        .main-dashboard {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: stretch;
-            gap: 2rem;
-            padding: 3rem 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        /* Card de habilidades (destaque JAVA) */
-        .card {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 160, 0, 0.4);
-            border-radius: 32px;
-            padding: 2rem 2.5rem;
-            box-shadow: 0 30px 40px -20px rgba(0,0,0,0.8), 0 0 0 2px rgba(255, 140, 0, 0.2) inset;
-            flex: 1 1 300px;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: #ff8c00;
-            box-shadow: 0 40px 50px -15px #ff440088;
-        }
-
-        .skills-card h2, .projects-card h2 {
-            font-size: 2rem;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            border-left: 6px solid #ff9933;
-            padding-left: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .skill-badge {
-            display: inline-block;
-            background: rgba(255, 140, 0, 0.2);
-            border: 1px solid #ff9900;
-            border-radius: 60px;
-            padding: 0.8rem 2rem;
-            margin: 0.5rem 0.5rem 0.5rem 0;
-            font-weight: 600;
-            font-size: 1.3rem;
-            backdrop-filter: blur(5px);
-            transition: all 0.2s;
-            box-shadow: 0 0 15px #ff8800;
-        }
-
-        .skill-badge.java {
-            background: rgba(255, 100, 0, 0.6);
-            border-color: #ffcc00;
-            font-size: 2rem;
-            padding: 0.8rem 2.5rem;
-            box-shadow: 0 0 30px #ff6600;
-            color: #fff;
-            text-shadow: 0 0 8px #ffaa00;
-        }
-
-        .skill-badge:not(.java) {
-            opacity: 0.9;
-        }
-
-        .projects-card {
-            flex: 2 1 450px;
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .project-item {
-            background: rgba(30, 20, 40, 0.6);
-            border-radius: 24px;
-            padding: 1.5rem 1.2rem;
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 180, 60, 0.4);
-            transition: background 0.3s;
-            text-align: center;
-        }
-
-        .project-item:hover {
-            background: rgba(60, 40, 30, 0.8);
-            border-color: #ffa500;
-        }
-
-        .project-item h3 {
-            font-size: 1.6rem;
-            margin: 0.5rem 0;
-            color: #ffcc88;
-        }
-
-        .project-item p {
-            color: #bbb;
-            font-size: 0.95rem;
-        }
-
-        .project-tag {
-            display: inline-block;
-            background: #ff8c00;
-            border-radius: 40px;
-            padding: 0.2rem 1rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #0a0f1e;
-            margin-top: 0.5rem;
-        }
-
-        /* rodapé simples */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(8px);
-            font-size: 0.9rem;
-            border-top: 1px solid #ff8833;
-            color: #ffddaa;
-        }
-
-        /* Ajuste para mobile */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.5rem;
-            }
-            nav a {
-                margin: 0 0.8rem;
-            }
-            .main-dashboard {
-                padding: 2rem 1.5rem;
-            }
-            .skill-badge.java {
-                font-size: 1.6rem;
-            }
-        }
-
-        /* botão fake "ver mais" só para estética */
-        .more-projects {
-            border: 1px dashed #ffaa33;
-            border-radius: 60px;
-            padding: 0.8rem;
-            text-align: center;
-            margin-top: 2rem;
-            color: #ffaa66;
-            font-weight: 500;
-            cursor: default;
-        }
+        .projects-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
+        .project-card { height: 250px; background: rgba(0, 212, 255, 0.1); border-radius: 15px; border: 2px dashed #00d4ff; display: flex; align-items: center; justify-content: center; font-style: italic; }
     </style>
 </head>
 <body>
-    <!-- Container do Three.js -->
-    <div id="canvas-container"></div>
 
-    <!-- Conteúdo da interface (sobreposto) -->
+    <canvas id="bg"></canvas>
+
     <div class="content">
         <header>
-            <div class="logo">
-                <h1>🚀 Java Pioneer <span>// fullstack</span></h1>
-            </div>
-            <nav>
-                <a href="#">home</a>
-                <a href="#">trabalhos</a>
-                <a href="#">contato</a>
-            </nav>
+            <h1>Seu Nome</h1>
+            <p>Backend Developer & <span class="java-badge">JAVA Specialist</span></p>
+            <p>Role para baixo para ver a magia</p>
         </header>
 
-        <!-- Destaque das habilidades (JAVA) + espaço projetos -->
-        <div class="main-dashboard">
-            <!-- Card de habilidades com JAVA gigante -->
-            <div class="card skills-card">
-                <h2>⚡ principais skills</h2>
-                <div style="margin: 1.5rem 0;">
-                    <span class="skill-badge java">☕ JAVA (expert)</span>
-                    <span class="skill-badge">Spring Boot</span>
-                    <span class="skill-badge">Jakarta EE</span>
-                    <span class="skill-badge">Hibernate</span>
-                    <span class="skill-badge">Kafka</span>
-                    <span class="skill-badge">Maven/Gradle</span>
-                    <span class="skill-badge">JUnit</span>
-                    <span class="skill-badge">Microsserviços</span>
-                    <span class="skill-badge">SQL/NoSQL</span>
-                </div>
-                <p style="color:#ffb577; font-size:1.1rem; border-top: 1px solid #ff8833; padding-top:1rem;">
-                    +15 anos construindo sistemas robustos e escaláveis com o ecossistema Java.
-                </p>
+        <section id="skills">
+            <h2>Habilidades Core</h2>
+            <div class="skills-grid">
+                <div class="skill-card"><h3>Java 17+</h3><p>Streams, Optional, Concorrência.</p></div>
+                <div class="skill-card"><h3>Spring Boot</h3><p>REST APIs, Security, Data JPA.</p></div>
+                <div class="skill-card"><h3>Microserviços</h3><p>Docker, Kubernetes, RabbitMQ.</p></div>
             </div>
+        </section>
 
-            <!-- Card com espaço para projetos (destaque) -->
-            <div class="card projects-card">
-                <h2>📁 projetos em destaque</h2>
-                <div class="project-grid">
-                    <div class="project-item">
-                        <h3>⚙️ FogueteStream</h3>
-                        <p>Pipeline de dados em tempo real com Kafka + Spring Cloud Stream.</p>
-                        <span class="project-tag">Java 21</span>
-                    </div>
-                    <div class="project-item">
-                        <h3>🛰️ OrbitalBank</h3>
-                        <p>Core bancário reativo com Quarkus e eventos.</p>
-                        <span class="project-tag">Quarkus</span>
-                    </div>
-                    <div class="project-item">
-                        <h3>🌕 MoonAuth</h3>
-                        <p>Sistema de autenticação com OAuth2 / JWT e microsserviços.</p>
-                        <span class="project-tag">Spring Security</span>
-                    </div>
-                    <div class="project-item">
-                        <h3>🧪 MarsLab</h3>
-                        <p>API de experimentos com GraphQL e MongoDB.</p>
-                        <span class="project-tag">GraphQL</span>
-                    </div>
-                </div>
-                <!-- espaço extra para mostrar que cabem mais projetos -->
-                <div class="more-projects">
-                    ✦ 4+ projetos em andamento (Java 17/21, Kotlin) ✦
-                </div>
+        <section id="projects">
+            <h2>Meus Projetos</h2>
+            <div class="projects-container">
+                <div class="project-card">Projeto 01 - API de E-commerce</div>
+                <div class="project-card">Projeto 02 - Microserviço de Pagamentos</div>
+                <div class="project-card">Projeto 03 - App de Gerenciamento</div>
             </div>
-        </div>
-
-        <footer>
-            <span>🔥 foguetes explodindo em three.js • destaque absoluto para JAVA 🔥</span>
-        </footer>
+        </section>
     </div>
 
-    <!-- Biblioteca Three.js e animação -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-            }
-        }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
-
-        // --- Cena, câmera, renderizador ---
+    <script>
+        // --- THREE.JS SETUP ---
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0f1e); // tom escuro
-        // Adicionar névoa sutil
-        scene.fog = new THREE.FogExp2(0x0a0f1e, 0.002);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg'), antialias: true });
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(10, 6, 20);
-        camera.lookAt(0, 2, 0);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true; // para efeito nos foguetes
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.setPixelRatio(window.devicePixelRatio);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.setZ(30);
 
-        // Controles desabilitados para não atrapalhar interação com o conteúdo, mas manter mouse move?
-        // Vamos desabilitar para não competir com a UI, mas manter órbita muito lenta ou só estática?
-        // Para efeito de portfolio, deixamos sem controles, câmera fixa mas com leve rotação automática.
-        // Iremos mover a câmera lentamente em círculo.
-        
-        // --- Iluminação ---
-        // Luz ambiente suave
-        const ambientLight = new THREE.AmbientLight(0x404060);
-        scene.add(ambientLight);
+        // --- CRIANDO AS "EXPLOSÕES" (PARTÍCULAS) ---
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
 
-        // Luz principal (tipo sol) para destacar os foguetes
-        const dirLight = new THREE.DirectionalLight(0xffeedd, 1);
-        dirLight.position.set(5, 15, 10);
-        dirLight.castShadow = true;
-        dirLight.receiveShadow = true;
-        dirLight.shadow.mapSize.width = 1024;
-        dirLight.shadow.mapSize.height = 1024;
-        const d = 20;
-        dirLight.shadow.camera.left = -d;
-        dirLight.shadow.camera.right = d;
-        dirLight.shadow.camera.top = d;
-        dirLight.shadow.camera.bottom = -d;
-        dirLight.shadow.camera.near = 1;
-        dirLight.shadow.camera.far = 30;
-        scene.add(dirLight);
-
-        // Luz de preenchimento quente (laranja)
-        const pointLight = new THREE.PointLight(0xff5500, 0.8, 30);
-        pointLight.position.set(-2, 5, 5);
-        scene.add(pointLight);
-
-        // Backlight azul
-        const blueLight = new THREE.PointLight(0x2266ff, 0.5);
-        blueLight.position.set(0, 3, -10);
-        scene.add(blueLight);
-
-        // Estrelas de fundo (partículas)
-        const starsGeometry = new THREE.BufferGeometry();
-        const starsCount = 2000;
-        const starsPositions = new Float32Array(starsCount * 3);
-        for (let i = 0; i < starsCount * 3; i += 3) {
-            starsPositions[i] = (Math.random() - 0.5) * 200;
-            starsPositions[i+1] = (Math.random() - 0.5) * 200;
-            starsPositions[i+2] = (Math.random() - 0.5) * 200;
-        }
-        starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3));
-        const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2, transparent: true });
-        const stars = new THREE.Points(starsGeometry, starsMaterial);
-        scene.add(stars);
-
-        // --- Grupo de foguetes e explosões ---
-        const rocketsGroup = new THREE.Group();
-        scene.add(rocketsGroup);
-
-        // Função para criar um foguete simples (corpo, janela, barbatanas)
-        function createRocket(color = 0xff6633, posX = 0, posY = 1, posZ = 0) {
-            const group = new THREE.Group();
-
-            // Corpo (cilindro)
-            const bodyGeo = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 16);
-            const bodyMat = new THREE.MeshStandardMaterial({ color: color, emissive: 0x331100 });
-            const body = new THREE.Mesh(bodyGeo, bodyMat);
-            body.castShadow = true;
-            body.receiveShadow = true;
-            body.position.y = 0;
-            group.add(body);
-
-            // Ponta (cone)
-            const noseGeo = new THREE.ConeGeometry(0.9, 1.2, 16);
-            const noseMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0x441100 });
-            const nose = new THREE.Mesh(noseGeo, noseMat);
-            nose.castShadow = true;
-            nose.receiveShadow = true;
-            nose.position.y = 1.8;
-            group.add(nose);
-
-            // Janela (esfera)
-            const windowGeo = new THREE.SphereGeometry(0.3, 8);
-            const windowMat = new THREE.MeshStandardMaterial({ color: 0x88ccff, emissive: 0x113355 });
-            const windowSphere = new THREE.Mesh(windowGeo, windowMat);
-            windowSphere.castShadow = true;
-            windowSphere.receiveShadow = true;
-            windowSphere.position.set(0, 0.6, 0.6);
-            group.add(windowSphere);
-
-            // Barbatanas (3 pequenos triângulos)
-            const finGeo = new THREE.ConeGeometry(0.4, 0.8, 4);
-            const finMat = new THREE.MeshStandardMaterial({ color: 0xcc5500 });
-            
-            for (let i = 0; i < 3; i++) {
-                const fin = new THREE.Mesh(finGeo, finMat);
-                fin.castShadow = true;
-                fin.receiveShadow = true;
-                fin.rotation.y = (i / 3) * Math.PI * 2;
-                fin.rotation.x = 0.3;
-                fin.position.set(0, -1.0, 0.7);
-                group.add(fin);
-            }
-
-            // Propulsor (anel laranja)
-            const thrusterGeo = new THREE.TorusGeometry(0.6, 0.1, 8, 16);
-            const thrusterMat = new THREE.MeshStandardMaterial({ color: 0xff8800, emissive: 0x442200 });
-            const thruster = new THREE.Mesh(thrusterGeo, thrusterMat);
-            thruster.castShadow = true;
-            thruster.receiveShadow = true;
-            thruster.rotation.x = Math.PI / 2;
-            thruster.position.y = -1.5;
-            group.add(thruster);
-
-            group.position.set(posX, posY, posZ);
-            return group;
+        for(let i=0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
         }
 
-        // Criar vários foguetes em posições aleatórias ao redor do centro
-        const rocketColors = [0xff5533, 0xffaa33, 0xff6633, 0xff4433, 0xff7733];
-        for (let i = 0; i < 12; i++) {
-            const angle = (i / 12) * Math.PI * 2;
-            const radius = 6 + Math.random() * 4;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
-            const y = 1.5 + Math.random() * 3;
-            const rocket = createRocket(rocketColors[i % rocketColors.length], x, y, z);
-            // Rotacionar para apontar para fora (radialmente)
-            rocket.rotation.y = -angle;
-            rocket.rotation.x = 0.1;
-            rocket.rotation.z = 0.1;
-            rocketsGroup.add(rocket);
-        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const material = new THREE.PointsMaterial({
+            size: 0.05,
+            color: '#00d4ff',
+            transparent: true,
+            blending: THREE.AdditiveBlending
+        });
 
-        // Adicionar alguns no centro para serem "explodidos"
-        const centerRocket = createRocket(0xff3300, 0, 2.5, 0);
-        centerRocket.scale.set(1.3, 1.3, 1.3);
-        centerRocket.rotation.x = 0.2;
-        centerRocket.rotation.z = 0.1;
-        rocketsGroup.add(centerRocket);
+        const particlesMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particlesMesh);
 
-        // --- Partículas de explosão (fumaça / fogo) ---
-        const explosionParticles = [];
-        const particleGroup = new THREE.Group();
-        scene.add(particleGroup);
+        // Movimentação do Mouse para Interação
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
 
-        function createExplosion(centerX, centerY, centerZ, baseColor = 0xffaa33) {
-            const count = 60;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
-            for (let i = 0; i < count; i++) {
-                // posições aleatórias em volta
-                const r = 0.5 + Math.random() * 2.5;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.random() * Math.PI * 2;
-                positions[i*3] = centerX + Math.sin(theta) * Math.cos(phi) * r;
-                positions[i*3+1] = centerY + Math.sin(theta) * Math.sin(phi) * r;
-                positions[i*3+2] = centerZ + Math.cos(theta) * r;
-
-                const color = new THREE.Color().setHSL(0.05 + Math.random()*0.1, 1, 0.5 + Math.random()*0.3);
-                colors[i*3] = color.r;
-                colors[i*3+1] = color.g;
-                colors[i*3+2] = color.b;
-            }
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            
-            const material = new THREE.PointsMaterial({ 
-                size: 0.4, 
-                vertexColors: true, 
-                blending: THREE.AdditiveBlending,
-                transparent: true,
-                opacity: 0.9,
-                depthWrite: false
-            });
-            const points = new THREE.Points(geometry, material);
-            particleGroup.add(points);
-            
-            // armazenar para animar (sumir com o tempo)
-            explosionParticles.push({
-                mesh: points,
-                life: 1.0,
-                speed: 0.008 + Math.random() * 0.01
-            });
-        }
-
-        // criar algumas explosões iniciais para dar movimento
-        for (let i = 0; i < 5; i++) {
-            const x = (Math.random() - 0.5) * 8;
-            const y = 2 + Math.random() * 4;
-            const z = (Math.random() - 0.5) * 8;
-            createExplosion(x, y, z, 0xff8833);
-        }
-
-        // também criar periodicamente
-        setInterval(() => {
-            // escolher um foguete aleatório para "explodir"
-            if (rocketsGroup.children.length > 0) {
-                const idx = Math.floor(Math.random() * rocketsGroup.children.length);
-                const rocket = rocketsGroup.children[idx];
-                const pos = rocket.position.clone();
-                createExplosion(pos.x, pos.y, pos.z, 0xffaa00);
-                
-                // opcional: fazer o foguete pular ou tremer
-                rocket.rotation.x += 0.5;
-                rocket.rotation.z += 0.3;
-            }
-        }, 1800);
-
-        // --- Animações e loop ---
-        let clock = new THREE.Clock();
-
+        // --- ANIMAÇÃO ---
         function animate() {
-            const delta = clock.getDelta();
-            const elapsedTime = performance.now() * 0.001; // seconds
+            requestAnimationFrame(animate);
 
-            // Movimento suave da câmera (circular) para dar dinamismo
-            camera.position.x = 15 * Math.sin(elapsedTime * 0.1);
-            camera.position.z = 15 * Math.cos(elapsedTime * 0.15);
-            camera.position.y = 6 + Math.sin(elapsedTime * 0.2) * 2;
-            camera.lookAt(0, 2, 0);
+            // Rotação suave constante
+            particlesMesh.rotation.y += 0.002;
+            particlesMesh.rotation.x += 0.001;
 
-            // Rotacionar estrelas lentamente
-            stars.rotation.y += 0.0001;
-            stars.rotation.x += 0.00005;
-
-            // Pequena rotação nos foguetes (bobear)
-            rocketsGroup.children.forEach((rocket, index) => {
-                rocket.rotation.z += 0.005 * Math.sin(elapsedTime * 2 + index);
-                rocket.rotation.x += 0.003 * Math.cos(elapsedTime * 1.5 + index);
-            });
-
-            // Atualizar partículas de explosão: aumentar tamanho e diminuir opacidade
-            for (let i = explosionParticles.length - 1; i >= 0; i--) {
-                const p = explosionParticles[i];
-                p.life -= p.speed * 1.5;
-                if (p.life <= 0) {
-                    particleGroup.remove(p.mesh);
-                    p.mesh.geometry.dispose();
-                    p.mesh.material.dispose();
-                    explosionParticles.splice(i, 1);
-                } else {
-                    p.mesh.material.opacity = p.life;
-                    p.mesh.scale.setScalar(1 + (1 - p.life) * 1.5);
-                }
+            // Reação ao mouse (sutil)
+            if (mouseX > 0) {
+                particlesMesh.rotation.x += (mouseY * 0.00005);
+                particlesMesh.rotation.y += (mouseX * 0.00005);
             }
 
             renderer.render(scene, camera);
-            requestAnimationFrame(animate);
         }
 
         animate();
 
-        // Ajustar ao redimensionar janela
-        window.addEventListener('resize', onWindowResize, false);
-        function onWindowResize() {
+        // Responsividade
+        window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        // Gerar algumas explosões extras ao carregar
-        setTimeout(() => {
-            for (let i = 0; i < 8; i++) {
-                const x = (Math.random() - 0.5) * 10;
-                const y = 2 + Math.random() * 5;
-                const z = (Math.random() - 0.5) * 10;
-                createExplosion(x, y, z);
-            }
-        }, 300);
+        });
     </script>
 </body>
 </html>
