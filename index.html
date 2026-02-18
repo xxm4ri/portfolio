@@ -3,81 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Portfólio Obby</title>
+    <title>Java Dev Parkour Portfolio</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Roboto, sans-serif; background-color: #1a0033; }
         canvas { display: block; }
         
-        #ui-container {
+        /* Interface de Usuário */
+        #gui {
             position: absolute;
             top: 20px;
             left: 20px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #d8b4fe;
             pointer-events: none;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
-        /* Modal de Vitória / Habilidades */
+        /* Tela de Vitória e Habilidades */
         #win-screen {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            background: rgba(150, 100, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
+            width: 80%;
+            max-width: 500px;
+            background: rgba(45, 10, 80, 0.95);
+            border: 2px solid #bf77f6;
+            padding: 30px;
+            border-radius: 24px;
             text-align: center;
             color: white;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            z-index: 10;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            box-shadow: 0 0 50px rgba(191, 119, 246, 0.5);
         }
 
-        #win-screen.show { transform: translate(-50%, -50%) scale(1); }
-        
-        .skill-badge {
-            font-size: 3em;
-            font-weight: bold;
-            background: #fff;
-            color: #8a2be2;
-            padding: 10px 30px;
-            border-radius: 50px;
+        #win-screen.active { transform: translate(-50%, -50%) scale(1); }
+
+        .skill-tag {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+            background: linear-gradient(45deg, #8a2be2, #bf77f6);
+            padding: 10px 40px;
+            border-radius: 15px;
             display: inline-block;
-            margin-top: 20px;
+            margin: 20px 0;
+            letter-spacing: 5px;
         }
 
-        .projects {
-            margin-top: 30px;
+        .project-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+            margin-top: 20px;
         }
 
-        .project-card {
-            background: rgba(255,255,255,0.2);
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid white;
+        .project-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed #bf77f6;
+            font-size: 0.9rem;
+        }
+
+        button {
+            background: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            pointer-events: auto;
         }
     </style>
 </head>
 <body>
 
-    <div id="ui-container">
-        <h1>Parkour Portfolio</h1>
-        <p>Use WASD para mover e ESPAÇO para pular!</p>
+    <div id="gui">
+        <h1>Dev Parkour</h1>
+        <p>Use <b>WASD</b> ou <b>Setas</b> para mover</p>
+        <p>Pressione <b>ESPAÇO</b> para pular</p>
     </div>
 
-    <div id="win-screen">
-        <h2>🏆 VOCÊ CHEGOU AO TOPO!</h2>
-        <p>Minha principal habilidade é:</p>
-        <div class="skill-badge">JAVA</div>
+    <div id="win-screen" id="winScreen">
+        <h2 style="color: #ffd700;">⭐ OBBY CONCLUÍDO! ⭐</h2>
+        <p>Habilidade Master:</p>
+        <div class="skill-tag">JAVA</div>
         
-        <div class="projects">
-            <div class="project-card">📌 Sistema de Gestão</div>
-            <div class="project-card">📌 API Rest Spring Boot</div>
+        <div class="project-grid">
+            <div class="project-item">🚀 <b>Microservices</b><br>Spring Boot & Cloud</div>
+            <div class="project-item">🏗️ <b>Backend Auth</b><br>JWT & Spring Security</div>
         </div>
-        <button onclick="location.reload()" style="margin-top:20px; padding:10px; cursor:pointer;">Jogar Novamente</button>
+        <button onclick="location.reload()">Jogar de Novo</button>
     </div>
 
     <script type="importmap">
@@ -93,109 +111,140 @@
         import * as THREE from 'three';
         import * as CANNON from 'cannon-es';
 
-        // --- CONFIGURAÇÃO BÁSICA ---
+        // --- CENA E RENDERER ---
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x2a004a); // Fundo Roxo Escuro
+        scene.background = new THREE.Color(0x130026);
+        scene.fog = new THREE.Fog(0x130026, 10, 50);
+
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
 
-        // --- LUZES ---
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 10, 5);
-        scene.add(light);
-        scene.add(new THREE.AmbientLight(0x404040, 2));
-
         // --- FÍSICA ---
-        const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -9.82, 0) });
+        const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -20, 0) });
+
+        // --- PERSONAGEM (Pessoinha Estilo Obby) ---
+        const playerGroup = new THREE.Group();
         
-        // --- JOGADOR (A Esfera) ---
-        const playerGeo = new THREE.SphereGeometry(0.5);
-        const playerMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-        const playerMesh = new THREE.Mesh(playerGeo, playerMat);
-        scene.add(playerMesh);
+        // Corpo
+        const bodyGeo = new THREE.CapsuleGeometry(0.4, 0.8, 4, 8);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+        const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+        playerGroup.add(bodyMesh);
 
-        const playerBody = new CANNON.Body({
+        // Cabeça
+        const headGeo = new THREE.SphereGeometry(0.35);
+        const headMesh = new THREE.Mesh(headGeo, bodyMat);
+        headMesh.position.y = 0.8;
+        playerGroup.add(headMesh);
+
+        // Detalhe Lilás no Peito
+        const stripeGeo = new THREE.BoxGeometry(0.5, 0.1, 0.5);
+        const stripeMat = new THREE.MeshStandardMaterial({ color: 0xbf77f6 });
+        const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+        stripe.position.y = 0.3;
+        playerGroup.add(stripe);
+
+        scene.add(playerGroup);
+
+        const playerPhysBody = new CANNON.Body({
             mass: 1,
-            shape: new CANNON.Sphere(0.5),
-            position: new CANNON.Vec3(0, 5, 0)
+            shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.9, 0.4)),
+            position: new CANNON.Vec3(0, 5, 0),
+            fixedRotation: true
         });
-        world.addBody(playerBody);
+        world.addBody(playerPhysBody);
 
-        // --- CRIAÇÃO DO PARKOUR (PLATAFORMAS) ---
-        function createPlatform(x, y, z, color = 0xbf77f6) {
-            const size = { w: 3, h: 0.5, d: 3 };
-            const mesh = new THREE.Mesh(
-                new THREE.BoxGeometry(size.w, size.h, size.d),
-                new THREE.MeshStandardMaterial({ color: color })
-            );
+        // --- ILUMINAÇÃO ---
+        const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+        sun.position.set(5, 15, 10);
+        scene.add(sun);
+        scene.add(new THREE.AmbientLight(0xbf77f6, 0.5));
+
+        // --- PLATAFORMAS (FÁCEIS) ---
+        function addPlatform(x, y, z, w, color = 0x8a2be2) {
+            const geo = new THREE.BoxGeometry(w, 0.8, 6);
+            const mat = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.2 });
+            const mesh = new THREE.Mesh(geo, mat);
             mesh.position.set(x, y, z);
             scene.add(mesh);
 
-            const body = new CANNON.Body({
-                shape: new CANNON.Box(new CANNON.Vec3(size.w/2, size.h/2, size.d/2)),
-                type: CANNON.Body.STATIC
-            });
+            const shape = new CANNON.Box(new CANNON.Vec3(w/2, 0.4, 3));
+            const body = new CANNON.Body({ mass: 0, shape: shape });
             body.position.set(x, y, z);
             world.addBody(body);
-            return mesh;
         }
 
-        // Montando o caminho
-        createPlatform(0, 0, 0);       // Início
-        createPlatform(5, 2, -5);      // Pulo 1
-        createPlatform(0, 4, -10);     // Pulo 2
-        createPlatform(-5, 6, -15);    // Pulo 3
-        const finalPlatform = createPlatform(0, 8, -22, 0xffd700); // Final Dourado
+        // Percurso fácil e largo
+        addPlatform(0, 0, 0, 8);        // Início
+        addPlatform(0, 2, -10, 8);      // Meio 1
+        addPlatform(5, 4, -20, 8);      // Meio 2
+        addPlatform(0, 6, -30, 10, 0xffd700); // Fim Dourado
 
         // --- CONTROLES ---
         const keys = {};
         window.addEventListener('keydown', (e) => keys[e.code] = true);
         window.addEventListener('keyup', (e) => keys[e.code] = false);
 
-        // --- LOOP DE ANIMAÇÃO ---
-        function animate() {
-            requestAnimationFrame(animate);
+        let won = false;
+
+        function update() {
             world.fixedStep();
 
-            // Sincronizar Física com Visual
-            playerMesh.position.copy(playerBody.position);
-            
-            // Movimentação
-            const force = 5;
-            if (keys['KeyW']) playerBody.velocity.z = -force;
-            if (keys['KeyS']) playerBody.velocity.z = force;
-            if (keys['KeyA']) playerBody.velocity.x = -force;
-            if (keys['KeyD']) playerBody.velocity.x = force;
-            if (keys['Space'] && Math.abs(playerBody.velocity.y) < 0.01) playerBody.velocity.y = 5;
+            // Sincronizar visual
+            playerGroup.position.copy(playerPhysBody.position);
 
-            // Câmera segue o jogador
-            camera.position.set(playerMesh.position.x, playerMesh.position.y + 5, playerMesh.position.z + 10);
-            camera.lookAt(playerMesh.position);
+            // Movimento
+            const speed = 7;
+            let moveZ = 0;
+            let moveX = 0;
 
-            // Verificação de Vitória
-            if (playerMesh.position.y > 7.5 && Math.abs(playerMesh.position.z + 22) < 2) {
-                document.getElementById('win-screen').classList.add('show');
+            if (keys['KeyW'] || keys['ArrowUp']) moveZ = -speed;
+            if (keys['KeyS'] || keys['ArrowDown']) moveZ = speed;
+            if (keys['KeyA'] || keys['ArrowLeft']) moveX = -speed;
+            if (keys['KeyD'] || keys['ArrowRight']) moveX = speed;
+
+            playerPhysBody.velocity.z = moveZ;
+            playerPhysBody.velocity.x = moveX;
+
+            // Pulo (Só pula se estiver em contato com algo)
+            if (keys['Space'] && Math.abs(playerPhysBody.velocity.y) < 0.1) {
+                playerPhysBody.velocity.y = 12;
             }
 
-            // Reset se cair
-            if (playerMesh.position.y < -10) {
-                playerBody.position.set(0, 5, 0);
-                playerBody.velocity.set(0,0,0);
+            // Fall Reset
+            if (playerPhysBody.position.y < -10) {
+                playerPhysBody.position.set(0, 5, 0);
+                playerPhysBody.velocity.set(0, 0, 0);
             }
 
+            // Win Condition
+            if (!won && playerPhysBody.position.z < -28 && playerPhysBody.position.y > 5.5) {
+                won = true;
+                document.getElementById('win-screen').classList.add('active');
+            }
+
+            // Suavização da Câmera
+            const offset = new THREE.Vector3(0, 6, 12);
+            camera.position.lerp(playerGroup.position.clone().add(offset), 0.1);
+            camera.lookAt(playerGroup.position);
+        }
+
+        function render() {
+            requestAnimationFrame(render);
+            update();
             renderer.render(scene, camera);
         }
 
-        animate();
-
-        // Ajuste de tela
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        render();
     </script>
 </body>
 </html>
