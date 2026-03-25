@@ -6,314 +6,843 @@
 <title>Mariana Franco · Desenvolvedora de Sistemas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Mono:wght@400;500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
+/* ─── TOKENS ───────────────────────────────────────────────── */
 :root {
-  /* Cores ajustadas para maior contraste e visibilidade */
-  --ink:    #1a1015; /* Texto principal mais escuro */
-  --deep:   #261520;
-  --wine:   #7a2d42;
-  --rose:   #d4849a;
-  --blush:  #ecc5ce;
-  --petal:  #f7e8ec;
-  --cream:  #fdf5f0;
-  --gold:   #a67c45; /* Dourado levemente mais escuro para leitura */
-  --muted:  #4a3a3d; /* Cinza/vinho mais escuro para parágrafos */
-  --line:   rgba(122, 45, 66, 0.25); /* Linhas mais visíveis */
+  --bg:      #0c0a0b;
+  --surface: #141013;
+  --card:    #1a161a;
+  --border:  rgba(200,150,160,0.12);
+  --border2: rgba(200,150,160,0.22);
+  --wine:    #9b3a55;
+  --wine2:   #c4566e;
+  --rose:    #e8a0b0;
+  --blush:   #f2cdd4;
+  --cream:   #f7ede8;
+  --gold:    #c9a96e;
+  --text:    #ede8e3;
+  --muted:   #9e948e;
+  --dim:     #6a6067;
+  --accent:  #9b3a55;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;font-size:16px;}
-body{
-  background:var(--cream);
-  color:var(--ink);
-  font-family:'Jost',sans-serif;
-  overflow-x:hidden;
-  cursor:none;
+/* ─── RESET ─────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* ─── CURSOR ─────────────────────────────────────────────────── */
+#cur-dot {
+  position: fixed; width: 6px; height: 6px;
+  background: var(--wine2); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width .2s, height .2s, background .2s;
+}
+#cur-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1px solid var(--wine); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width .35s cubic-bezier(.2,1,.5,1), height .35s cubic-bezier(.2,1,.5,1), opacity .3s;
+  opacity: 0.4;
+}
+#cur-dot.hover { width: 18px; height: 18px; background: var(--rose); opacity: 0.6; }
+#cur-ring.hover { width: 60px; height: 60px; opacity: 0.15; }
+
+/* ─── LOADER ─────────────────────────────────────────────────── */
+#loader {
+  position: fixed; inset: 0; background: var(--bg);
+  z-index: 9000; display: flex; align-items: center;
+  justify-content: center; flex-direction: column; gap: 28px;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+#loader.done { opacity: 0; visibility: hidden; }
+.ld-name {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 2.8rem;
+  color: var(--wine2); letter-spacing: .03em;
+}
+.ld-bar {
+  width: 180px; height: 1px; background: var(--border2);
+  position: relative; overflow: hidden;
+}
+.ld-bar::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--wine2);
+  transform: scaleX(0); transform-origin: left;
+  animation: ldBar 1.2s ease forwards;
+}
+@keyframes ldBar { to { transform: scaleX(1); } }
+
+/* ─── NAV ─────────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 32px 64px;
+  transition: padding .4s, background .4s, border-color .4s;
+}
+nav.scrolled {
+  padding: 18px 64px;
+  background: rgba(12, 10, 11, 0.92);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 1.35rem;
+  color: var(--wine2); font-weight: 400;
+  letter-spacing: .02em;
+}
+.nav-links {
+  display: flex; gap: 40px;
+}
+.nav-links a {
+  font-size: .7rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--muted);
+  font-weight: 600; transition: color .3s;
+}
+.nav-links a:hover { color: var(--rose); }
+
+/* ─── HERO ─────────────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  max-width: 1360px; margin: 0 auto;
+  padding: 140px 64px 100px;
+  gap: 80px;
+  position: relative;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp .8s .4s ease forwards;
+}
+.hero-eyebrow::before {
+  content: ''; display: block; width: 40px; height: 1px;
+  background: var(--gold);
+}
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(4.5rem, 8vw, 8.5rem);
+  font-weight: 400; line-height: .88;
+  color: var(--text); margin-bottom: 36px;
+  opacity: 0; animation: fadeUp .9s .55s ease forwards;
+}
+.hero-name em {
+  display: block; font-style: italic; color: var(--wine2);
+}
+.hero-bio {
+  font-size: 1.1rem; line-height: 1.75;
+  color: var(--muted); max-width: 480px;
+  font-weight: 400; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp .9s .7s ease forwards;
+}
+.hero-bio strong { color: var(--rose); font-weight: 600; }
+.hero-ctas {
+  display: flex; gap: 20px; align-items: center;
+  opacity: 0; animation: fadeUp .9s .85s ease forwards;
+}
+.btn-primary {
+  display: inline-block;
+  padding: 15px 38px;
+  background: var(--wine); color: var(--cream);
+  font-size: .72rem; letter-spacing: .2em;
+  text-transform: uppercase; font-weight: 700;
+  border: 1px solid var(--wine);
+  transition: background .3s, color .3s, border-color .3s;
+  font-family: 'Syne', sans-serif;
+}
+.btn-primary:hover {
+  background: transparent; color: var(--wine2);
+  border-color: var(--wine2);
+}
+.btn-ghost {
+  display: inline-block;
+  padding: 15px 38px;
+  background: transparent; color: var(--muted);
+  font-size: .72rem; letter-spacing: .2em;
+  text-transform: uppercase; font-weight: 700;
+  border: 1px solid var(--border2);
+  transition: color .3s, border-color .3s;
+  font-family: 'Syne', sans-serif;
+}
+.btn-ghost:hover { color: var(--rose); border-color: var(--rose); }
+
+/* Hero right — stat block */
+.hero-right {
+  display: flex; flex-direction: column; gap: 32px;
+  opacity: 0; animation: fadeUp .9s .7s ease forwards;
+}
+.stat-block {
+  border-left: 2px solid var(--wine);
+  padding: 24px 32px;
+  background: var(--card);
+  position: relative;
+  transition: border-color .3s;
+}
+.stat-block:hover { border-color: var(--rose); }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.2rem; font-weight: 400; font-style: italic;
+  color: var(--wine2); line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-size: .65rem; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--dim);
+  font-weight: 600;
 }
 
-/* ── CURSOR ── */
-#cur{position:fixed;width:8px;height:8px;background:var(--wine);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;}
-#curt{position:fixed;width:32px;height:32px;border:1px solid var(--wine);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.3;transition:width .3s,height .3s;}
-#cur.h{width:22px;height:22px;background:var(--rose);opacity:0.5;}
-
-/* ── LOADER ── */
-#loader{position:fixed;inset:0;background:var(--cream);z-index:9000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .9s,visibility .9s;}
-#loader.off{opacity:0;visibility:hidden;}
-.ld-logo{font-family:'Cormorant',serif;font-size:2.4rem;font-weight:400;font-style:italic;color:var(--wine);letter-spacing:.05em;}
-
-/* ── CANVAS BG ── */
-#canvas-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;}
-
-/* ── NAV ── */
-#nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:28px 60px;
-  transition:padding .4s,background .4s;
+/* ─── MARQUEE STRIP ──────────────────────────────────────────── */
+.strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 0; overflow: hidden;
+  background: var(--surface);
 }
-#nav.scrolled{padding:16px 60px;background:rgba(253,245,240,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);}
-.nav-logo{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:600;color:var(--wine);}
-.nav-links a{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);text-decoration:none;font-weight:500;transition:color .3s;}
-.nav-links a:hover,.nav-links a.active{color:var(--wine);}
+.strip-track {
+  display: flex; gap: 60px;
+  white-space: nowrap;
+  animation: marquee 22s linear infinite;
+  width: max-content;
+}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.strip-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--dim);
+  display: flex; align-items: center; gap: 12px;
+}
+.strip-dot { width: 4px; height: 4px; background: var(--wine); border-radius: 50%; }
 
-/* ── SECTIONS WRAPPER ── */
-.wrap{position:relative;z-index:5;}
+/* ─── ABOUT ─────────────────────────────────────────────────── */
+#about {
+  max-width: 1360px; margin: 0 auto;
+  padding: 130px 64px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 100px; align-items: center;
+}
+.about-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 20px; display: block;
+}
+.about-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  font-weight: 400; line-height: 1.1;
+  color: var(--text); margin-bottom: 32px;
+}
+.about-headline em { font-style: italic; color: var(--wine2); }
+.about-body {
+  font-size: 1rem; line-height: 1.85;
+  color: var(--muted); margin-bottom: 24px;
+}
+.about-body + .about-body { margin-bottom: 0; }
+.about-right { display: flex; flex-direction: column; gap: 2px; }
+.about-fact {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between;
+  align-items: center;
+}
+.about-fact:first-child { border-top: 1px solid var(--border); }
+.fact-key {
+  font-size: .7rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--dim);
+  font-weight: 600;
+}
+.fact-val {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 1.05rem;
+  color: var(--rose);
+}
 
-/* ── HERO ── */
-#hero{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:1.2fr 0.8fr;
-  align-items:center;
-  padding:120px 60px 80px;
-  gap:60px;
-  max-width:1400px;
-  margin:0 auto;
+/* ─── SKILLS ─────────────────────────────────────────────────── */
+#skills {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 120px 0;
 }
-.hero-tag{
-  display:inline-flex;align-items:center;gap:10px;
-  font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:24px;
-  font-family:'DM Mono',monospace;
-  font-weight:500;
+.skills-inner {
+  max-width: 1360px; margin: 0 auto;
+  padding: 0 64px;
 }
-.hero-name{
-  font-family:'Cormorant',serif;
-  font-size:clamp(4rem,7vw,7.5rem);
-  font-weight:400;
-  line-height:.9;
-  color:var(--ink);
-  margin-bottom:12px;
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 16px; display: block;
 }
-.hero-name em{font-style:italic;color:var(--wine);display:block;}
-.hero-bio{
-  font-size:1.15rem;line-height:1.7;color:var(--muted);
-  max-width:520px;margin-bottom:40px;
-  font-weight:400;
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 4.5vw, 4rem);
+  font-weight: 400; line-height: 1;
+  color: var(--text); margin-bottom: 72px;
 }
-.hero-bio strong{color:var(--wine);font-weight:600;}
+.section-title em { font-style: italic; color: var(--wine2); }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.sk-item {
+  background: var(--card);
+  padding: 40px 32px;
+  position: relative; overflow: hidden;
+  transition: background .3s;
+}
+.sk-item::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--wine);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s ease;
+}
+.sk-item:hover { background: #1e1a1e; }
+.sk-item:hover::before { transform: scaleX(1); }
+.sk-icon {
+  font-size: 2rem; margin-bottom: 20px;
+  display: block;
+}
+.sk-title {
+  font-size: .95rem; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+  letter-spacing: .02em;
+}
+.sk-sub {
+  font-size: .82rem; color: var(--dim);
+  line-height: 1.6; margin-bottom: 24px;
+}
+.sk-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem; color: var(--wine2);
+  margin-bottom: 10px; font-weight: 500;
+}
+.sk-bar-bg {
+  height: 2px; background: var(--border2);
+  border-radius: 2px; overflow: hidden;
+}
+.sk-bar-fill {
+  height: 100%; background: linear-gradient(90deg, var(--wine), var(--rose));
+  border-radius: 2px; width: 0;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1) .3s;
+}
 
-/* ── SKILLS ── */
-#skills{padding:100px 0;background:var(--deep);}
-.sk-head-left .s-t{font-family:'Cormorant',serif;font-size:3.2rem;font-weight:400;color:var(--cream);}
-.sk-head-right{font-size:.95rem;color:rgba(253,245,240,.8);font-weight:400;}
-.sk-card{background:rgba(255, 255, 255, 0.03);border:1px solid rgba(255,255,255,0.1);}
-.sk-name{color:var(--cream);font-weight:400;}
-.sk-desc{color:rgba(253,245,240,0.8);font-size:0.9rem;}
-.sk-pct-wrap{color:var(--rose);font-weight:500;opacity:1;}
-
-/* ── PROJECTS ── */
-#projects{max-width:1300px;margin:0 auto;padding:100px 60px;}
-.pj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px;}
-.pj-card{
-  border:1px solid var(--line);
-  background:white;
-  transition:all .4s ease;
+/* ─── PROJECTS ───────────────────────────────────────────────── */
+#projects {
+  max-width: 1360px; margin: 0 auto;
+  padding: 130px 64px;
 }
-.pj-thumb{
-  height:300px; /* Aumentado para mostrar melhor a imagem */
-  width:100%;
-  overflow:hidden;
-  background:var(--petal);
-  display:block;
+.projects-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-end; margin-bottom: 72px;
 }
-.pj-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Faz a imagem preencher o espaço */
-  transition: transform .6s ease;
+.pj-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
 }
-.pj-card:hover img {
-  transform: scale(1.05);
+.pj-card {
+  background: var(--card);
+  overflow: hidden;
+  position: relative;
+  transition: background .3s;
 }
-.pj-body{padding:32px;}
-.pj-title{font-size:1.8rem;color:var(--ink);margin-bottom:12px;font-weight:500;}
-.pj-desc{font-size:1rem;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.pj-card:hover { background: #1a161a; }
+.pj-img-wrap {
+  height: 340px; overflow: hidden;
+  position: relative;
+}
+.pj-img-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(12,10,11,.7));
+  z-index: 1;
+}
+.pj-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform .7s cubic-bezier(.2,0,.2,1);
+  filter: grayscale(10%) brightness(0.9);
+}
+.pj-card:hover .pj-img-wrap img {
+  transform: scale(1.04);
+  filter: grayscale(0%) brightness(1);
+}
+.pj-body {
+  padding: 36px 40px 40px;
+}
+.pj-tags {
+  display: flex; gap: 10px;
+  margin-bottom: 20px; flex-wrap: wrap;
+}
+.pj-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+  border: 1px solid var(--border2);
+  padding: 4px 10px;
+}
+.pj-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem; font-weight: 400;
+  color: var(--text); margin-bottom: 14px;
+  line-height: 1.1;
+}
+.pj-desc {
+  font-size: .92rem; line-height: 1.7;
+  color: var(--muted); margin-bottom: 32px;
+}
+.pj-footer {
+  display: flex; align-items: center;
+  justify-content: space-between;
+}
+.pj-link {
+  font-size: .72rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--rose);
+  font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+  transition: gap .3s, color .3s;
+}
+.pj-link:hover { gap: 14px; color: var(--blush); }
+.pj-status-dot {
+  width: 7px; height: 7px;
+  background: #4ade80; border-radius: 50%;
+  box-shadow: 0 0 8px rgba(74,222,128,.5);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(74,222,128,.5); }
+  50% { box-shadow: 0 0 16px rgba(74,222,128,.8); }
+}
+.pj-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; letter-spacing: .2em;
+  color: var(--dim); display: flex; align-items: center; gap: 8px;
+}
 
-/* ── CONTACT ── */
-#contact{background:var(--petal);padding:100px 60px;}
-.ct-email{font-weight:500;color:var(--wine);border-bottom:2px solid var(--wine);}
-.ct-info-val{font-weight:500;color:var(--ink);}
+/* ─── CONTACT ─────────────────────────────────────────────────── */
+#contact {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 140px 64px;
+  text-align: center;
+}
+.ct-inner {
+  max-width: 700px; margin: 0 auto;
+}
+.ct-intro {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; letter-spacing: .35em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 24px; display: block;
+}
+.ct-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 400; line-height: .95;
+  margin-bottom: 32px;
+}
+.ct-headline em { font-style: italic; color: var(--wine2); display: block; }
+.ct-body {
+  font-size: 1rem; color: var(--muted);
+  line-height: 1.75; margin-bottom: 56px;
+}
+.ct-email {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.3rem; color: var(--rose);
+  border-bottom: 1px solid var(--wine);
+  padding-bottom: 4px;
+  transition: color .3s, border-color .3s;
+  margin-bottom: 56px;
+}
+.ct-email:hover { color: var(--blush); border-color: var(--rose); }
+.ct-socials {
+  display: flex; justify-content: center; gap: 32px;
+}
+.ct-social {
+  font-size: .68rem; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--dim);
+  font-weight: 700;
+  border: 1px solid var(--border2);
+  padding: 12px 24px;
+  transition: color .3s, border-color .3s;
+}
+.ct-social:hover { color: var(--rose); border-color: var(--rose); }
 
-/* ── REVEAL ── */
-.rv{opacity:0;transform:translateY(30px);transition:all .8s ease;}
-.rv.on{opacity:1;transform:translateY(0);}
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 64px;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 100%;
+}
+.ft-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem; letter-spacing: .18em;
+  color: var(--dim);
+}
+.ft-right {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: .9rem;
+  color: var(--wine);
+}
 
-/* Responsividade para Imagens */
-@media(max-width:900px){
-  .pj-grid{grid-template-columns:1fr;}
-  #hero{grid-template-columns:1fr;}
+/* ─── REVEAL ─────────────────────────────────────────────────── */
+.rv {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.rv.on { opacity: 1; transform: translateY(0); }
+.rv-delay-1 { transition-delay: .1s; }
+.rv-delay-2 { transition-delay: .2s; }
+.rv-delay-3 { transition-delay: .3s; }
+.rv-delay-4 { transition-delay: .4s; }
+
+/* ─── FADE UP KEYFRAME ───────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  #hero, #about { grid-template-columns: 1fr; gap: 60px; }
+  .hero-right { flex-direction: row; flex-wrap: wrap; }
+  .stat-block { flex: 1; min-width: 160px; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  .pj-grid { grid-template-columns: 1fr; }
+  nav, #hero, #about, #projects, #contact, footer { padding-left: 32px; padding-right: 32px; }
+  .skills-inner { padding: 0 32px; }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .projects-header { flex-direction: column; align-items: flex-start; gap: 24px; }
 }
 </style>
 </head>
 <body>
 
-<div id="loader"><div class="ld-logo">Mariana Franco</div></div>
-<div id="cur"></div>
-<div id="curt"></div>
-<div id="canvas-wrap"></div>
+<!-- CURSOR -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
 
-<nav id="nav">
-  <div class="nav-logo">M. <em>Franco</em></div>
-  <div class="nav-right">
-    <ul class="nav-links">
-      <li><a href="#hero">Início</a></li>
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projetos</a></li>
-      <li><a href="#contact">Contato</a></li>
-    </ul>
-  </div>
-</nav>
-
-<div class="wrap">
-  <section id="hero">
-    <div class="hero-left">
-      <div class="hero-tag rv">Desenvolvedora de Sistemas · SENAI</div>
-      <h1 class="hero-name rv">Mariana <em>Franco</em></h1>
-      <p class="hero-bio rv">
-        Estudante apaixonada por construir soluções reais com <strong>Java, Spring Boot, MySQL e HTML</strong>. Unindo lógica técnica e cuidado visual para criar experiências de alto impacto.
-      </p>
-      <div class="hero-actions rv">
-        <a href="#projects" class="btn-fill" style="padding: 15px 35px; background: var(--wine); color: white; text-decoration: none; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; font-weight: 600;">Ver Projetos</a>
-      </div>
-    </div>
-    
-    <div class="hero-right rv">
-      <div style="border-left: 2px solid var(--wine); padding-left: 40px;">
-        <div style="font-size: 4rem; font-family: 'Cormorant'; color: var(--wine);">100%</div>
-        <div style="text-transform: uppercase; letter-spacing: 3px; font-size: 12px; color: var(--gold); font-weight: 600;">Dedicação ao Código</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="projects">
-    <div class="pj-head rv" style="margin-bottom: 60px;">
-      <h2 style="font-family: 'Cormorant'; font-size: 3.5rem; font-weight: 400;">Meus <em>Projetos</em></h2>
-      <p style="color: var(--muted); font-size: 1.1rem;">Aplicações desenvolvidas com foco em backend e usabilidade.</p>
-    </div>
-
-    <div class="pj-grid">
-      <div class="pj-card rv">
-        <div class="pj-thumb">
-            <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Livraria da Leitora">
-        </div>
-        <div class="pj-body">
-          <div class="pj-techs"><span class="pj-tech">HTML</span><span class="pj-tech">Java</span><span class="pj-tech">MySQL</span></div>
-          <h3 class="pj-title">Livraria da Leitora</h3>
-          <p class="pj-desc">Sistema de gerenciamento de livros e catálogo online com interface responsiva.</p>
-          <div class="pj-foot">
-            <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
-            <span class="pj-status"><span class="dot-g"></span> Online</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="pj-card rv">
-        <div class="pj-thumb">
-            <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Casa Store">
-        </div>
-        <div class="pj-body">
-          <div class="pj-techs"><span class="pj-tech">HTML</span><span class="pj-tech">CSS</span><span class="pj-tech">JS</span></div>
-          <h3 class="pj-title">Casa Store</h3>
-          <p class="pj-desc">Landing page sofisticada para venda de ovos gourmet, focada em conversão e design.</p>
-          <div class="pj-foot">
-            <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
-            <span class="pj-status"><span class="dot-g"></span> Online</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="skills">
-    <div class="sk-inner">
-      <div class="sk-head">
-        <div class="sk-head-left">
-          <h2 class="s-t">Tecnologias</h2>
-        </div>
-      </div>
-      <div class="sk-grid">
-        <div class="sk-card rv">
-          <div class="sk-card-top">
-            <i class="fab fa-java" style="color: var(--rose); font-size: 2rem;"></i>
-            <span class="sk-pct-wrap">85%</span>
-          </div>
-          <h4 class="sk-name">Java</h4>
-          <p class="sk-desc">Desenvolvimento robusto com POO e integração de banco de dados.</p>
-          <div class="sk-bar-wrap"><div class="sk-bar" data-w="85" style="background: var(--rose); height: 100%;"></div></div>
-        </div>
-        <div class="sk-card rv">
-          <div class="sk-card-top">
-            <i class="fas fa-leaf" style="color: #6db33f; font-size: 2rem;"></i>
-            <span class="sk-pct-wrap">75%</span>
-          </div>
-          <h4 class="sk-name">Spring Boot</h4>
-          <p class="sk-desc">Criação de APIs REST eficientes e seguras.</p>
-          <div class="sk-bar-wrap"><div class="sk-bar" data-w="75" style="background: #6db33f; height: 100%;"></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <div class="ct-inner">
-      <div class="ct-left rv">
-        <h2 class="s-t">Vamos <em>conversar?</em></h2>
-        <p>Disponível para novos projetos e oportunidades profissionais.</p>
-        <a href="mailto:marianavifranco@gmail.com" class="ct-email">marianavifranco@gmail.com</a>
-      </div>
-    </div>
-  </section>
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-name">Mariana Franco</div>
+  <div class="ld-bar"></div>
 </div>
 
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.128.0/build/three.module.js"}}</script>
-<script type="module">
-import * as THREE from 'https://unpkg.com/three@0.128.0/build/three.module.js';
-// ... (Lógica do Three.js mantida do seu código original para o fundo animado)
-const wrap = document.getElementById('canvas-wrap');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 14);
-const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
-renderer.setSize(innerWidth, innerHeight);
-wrap.appendChild(renderer.domElement);
-scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-const g = new THREE.Group();
-scene.add(g);
-const sphere = new THREE.Mesh(new THREE.SphereGeometry(1.2,32,32), new THREE.MeshPhongMaterial({color:0x7a2d42, transparent:true, opacity:0.1}));
-g.add(sphere);
-function animate() {
-  requestAnimationFrame(animate);
-  g.rotation.y += 0.005;
-  renderer.render(scene, camera);
-}
-animate();
-</script>
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">M. Franco</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Início</a></li>
+    <li><a href="#about">Sobre</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projetos</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+</nav>
 
-<script>
-// Lógica de Reveal Otimizada
+<!-- ── HERO ───────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Desenvolvedora de Sistemas · SENAI</div>
+    <h1 class="hero-name">
+      Mariana
+      <em>Franco</em>
+    </h1>
+    <p class="hero-bio">
+      Estudante apaixonada por construir soluções reais com
+      <strong>Java, Spring Boot, MySQL e HTML</strong>.
+      Unindo lógica técnica e cuidado visual para criar
+      experiências de alto impacto.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">Ver Projetos</a>
+      <a href="#contact" class="btn-ghost">Entrar em contato</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat-block">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Dedicação ao Código</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Projetos Entregues</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">4+</div>
+      <div class="stat-label">Tecnologias Aprendidas</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STRIP ──────────────────────────────────────────────────── -->
+<div class="strip">
+  <div class="strip-track">
+    <!-- duplicado para loop contínuo -->
+    <span class="strip-item"><span class="strip-dot"></span>Java</span>
+    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
+    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
+    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
+    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
+    <span class="strip-item"><span class="strip-dot"></span>POO</span>
+    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
+    <span class="strip-item"><span class="strip-dot"></span>Git</span>
+    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
+    <span class="strip-item"><span class="strip-dot"></span>Java</span>
+    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
+    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
+    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
+    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
+    <span class="strip-item"><span class="strip-dot"></span>POO</span>
+    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
+    <span class="strip-item"><span class="strip-dot"></span>Git</span>
+    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
+  </div>
+</div>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="about-left rv">
+    <span class="about-label">01 — Sobre mim</span>
+    <h2 class="about-headline">
+      Construindo com <em>propósito</em> e precisão
+    </h2>
+    <p class="about-body">
+      Sou estudante de Desenvolvimento de Sistemas no SENAI, com foco em back-end
+      robusto e interfaces que realmente funcionam. Cada projeto que construo
+      parte de um problema real e busca uma solução eficiente e elegante.
+    </p>
+    <p class="about-body" style="margin-top:20px;">
+      Minha abordagem combina raciocínio lógico com atenção aos detalhes visuais —
+      porque bom código e boa experiência do usuário andam juntos.
+    </p>
+  </div>
+
+  <div class="about-right rv rv-delay-2">
+    <div class="about-fact">
+      <span class="fact-key">Formação</span>
+      <span class="fact-val">SENAI — Desenvolvimento de Sistemas</span>
+    </div>
+    <div class="about-fact">
+      <span class="fact-key">Foco atual</span>
+      <span class="fact-val">Back-end com Java &amp; Spring</span>
+    </div>
+    <div class="about-fact">
+      <span class="fact-key">Localização</span>
+      <span class="fact-val"> SC, Criciúma</span>
+    </div>
+    <div class="about-fact">
+      <span class="fact-key">Status</span>
+      <span class="fact-val">Aberta a oportunidades</span>
+    </div>
+    <div class="about-fact">
+      <span class="fact-key">Contato</span>
+      <span class="fact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a171b08131b141b0c131c081b1419153a1d171b131654191517">[email&#160;protected]</a></span>
+    </div>
+  </div>
+</section>
+
+<!-- ── SKILLS ─────────────────────────────────────────────────── -->
+<section id="skills">
+  <div class="skills-inner">
+    <span class="section-label rv">02 — Tecnologias</span>
+    <h2 class="section-title rv rv-delay-1">Stack &amp; <em>Ferramentas</em></h2>
+
+    <div class="skills-grid">
+
+      <div class="sk-item rv">
+        <span class="sk-icon">☕</span>
+        <div class="sk-title">Java</div>
+        <div class="sk-sub">Programação orientada a objetos, estruturas de dados e integração com banco de dados.</div>
+        <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="85"></div></div>
+      </div>
+
+      <div class="sk-item rv rv-delay-1">
+        <span class="sk-icon" style="color:#6db33f;">🌿</span>
+        <div class="sk-title">Spring Boot</div>
+        <div class="sk-sub">Criação de APIs RESTful eficientes, seguras e escaláveis.</div>
+        <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="75"></div></div>
+      </div>
+
+      <div class="sk-item rv rv-delay-2">
+        <span class="sk-icon">🗄️</span>
+        <div class="sk-title">MySQL</div>
+        <div class="sk-sub">Modelagem relacional, consultas SQL otimizadas e integração com aplicações Java.</div>
+        <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="70"></div></div>
+      </div>
+
+      <div class="sk-item rv rv-delay-3">
+        <span class="sk-icon">🌐</span>
+        <div class="sk-title">HTML &amp; CSS</div>
+        <div class="sk-sub">Interfaces responsivas, semântica acessível e design com atenção aos detalhes.</div>
+        <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="88"></div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ───────────────────────────────────────────────── -->
+<section id="projects">
+  <div class="projects-header">
+    <div>
+      <span class="section-label rv">03 — Portfólio</span>
+      <h2 class="section-title rv rv-delay-1" style="margin-bottom:0;">Meus <em>Projetos</em></h2>
+    </div>
+    <a href="https://github.com/xxm4ri" target="_blank" class="btn-ghost rv rv-delay-2" style="white-space:nowrap;">Ver GitHub →</a>
+  </div>
+
+  <div class="pj-grid">
+
+    <div class="pj-card rv">
+      <div class="pj-img-wrap">
+        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Livraria da Leitora">
+      </div>
+      <div class="pj-body">
+        <div class="pj-tags">
+          <span class="pj-tag">HTML</span>
+          <span class="pj-tag">Java</span>
+          <span class="pj-tag">MySQL</span>
+        </div>
+        <h3 class="pj-title">Livraria da Leitora</h3>
+        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online e interface responsiva. Back-end em Java com persistência em MySQL.</p>
+        <div class="pj-footer">
+          <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
+          <span class="pj-status"><span class="pj-status-dot"></span> Online</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pj-card rv rv-delay-2">
+      <div class="pj-img-wrap">
+        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Casa Store">
+      </div>
+      <div class="pj-body">
+        <div class="pj-tags">
+          <span class="pj-tag">HTML</span>
+          <span class="pj-tag">CSS</span>
+          <span class="pj-tag">JavaScript</span>
+        </div>
+        <h3 class="pj-title">Casa Store</h3>
+        <p class="pj-desc">Landing page sofisticada para venda de produtos gourmet, focada em conversão, UX refinado e design de alta qualidade.</p>
+        <div class="pj-footer">
+          <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
+          <span class="pj-status"><span class="pj-status-dot"></span> Online</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="ct-inner rv">
+    <span class="ct-intro">04 — Contato</span>
+    <h2 class="ct-headline">
+      Vamos
+      <em>conversar?</em>
+    </h2>
+    <p class="ct-body">
+      Disponível para novos projetos, oportunidades profissionais<br>
+      e colaborações que façam a diferença.
+    </p>
+    <span class="ct-email">marianavifranco@gmail.com</span>
+    <div class="ct-socials">
+      <a href="https://github.com/xxm4ri" target="_blank" class="ct-social">GitHub</a>
+      <a href="https://linkedin.com/in/marianafranco" target="_blank" class="ct-social">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────── -->
+<footer>
+  <div class="ft-left">© 2026 Mariana Franco · Todos os direitos reservados</div>
+  <div class="ft-right">Feito com dedicação ✦</div>
+</footer>
+
+<!-- ── SCRIPTS ────────────────────────────────────────────────── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* Cursor */
+const dot  = document.getElementById('cur-dot');
+const ring = document.getElementById('cur-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function loopCursor() {
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
+  dot.style.left  = mx + 'px';
+  dot.style.top   = my + 'px';
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(loopCursor);
+}
+loopCursor();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { dot.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { dot.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+
+/* Nav scroll */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* Loader */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('done'), 1400);
+});
+
+/* Reveal on scroll */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(en => {
-    if(en.isIntersecting) {
+    if (en.isIntersecting) {
       en.target.classList.add('on');
-      const bar = en.target.querySelector('.sk-bar');
-      if(bar) bar.style.width = bar.dataset.w + '%';
+      const bar = en.target.querySelector('.sk-bar-fill');
+      if (bar) bar.style.width = bar.dataset.w + '%';
+      obs.unobserve(en.target);
     }
   });
-}, {threshold: 0.1});
+}, { threshold: 0.12 });
+
 document.querySelectorAll('.rv').forEach(el => obs.observe(el));
 
-// Cursor e Loader
-window.addEventListener('load', () => document.getElementById('loader').classList.add('off'));
-const cur = document.getElementById('cur');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top = e.clientY + 'px';
-});
-</script>
-
-</body>
-</html>
+/*
