@@ -373,25 +373,24 @@ nav.scrolled {
 }
 .pj-card:hover { background: #1a161a; }
 .pj-img-wrap {
-  height: 340px; overflow: hidden;
+  height: 280px; overflow: hidden;
   position: relative;
 }
 .pj-img-wrap::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, rgba(12,10,11,.7));
+  background: linear-gradient(to bottom, transparent 40%, rgba(12,10,11,.8));
   z-index: 1;
 }
 .pj-img-wrap img {
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center center;
   transition: transform .7s cubic-bezier(.2,0,.2,1);
-  filter: grayscale(10%) brightness(0.9);
+  filter: grayscale(20%) brightness(0.85);
 }
 .pj-card:hover .pj-img-wrap img {
-  transform: scale(1.04);
-  filter: grayscale(0%) brightness(1);
+  transform: scale(1.06);
+  filter: grayscale(0%) brightness(0.95);
 }
 .pj-body {
   padding: 36px 40px 40px;
@@ -671,7 +670,7 @@ footer {
     </div>
     <div class="about-fact">
       <span class="fact-key">Contato</span>
-      <span class="fact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a171b08131b141b0c131c081b1419153a1d171b131654191517">[email&#160;protected]</a></span>
+      <span class="fact-val">marianavifranco@gmail.com</span>
     </div>
   </div>
 </section>
@@ -785,10 +784,12 @@ footer {
       Disponível para novos projetos, oportunidades profissionais<br>
       e colaborações que façam a diferença.
     </p>
-    <span class="ct-email">marianavifranco@gmail.com</span>
+    <a href="mailto:marianavifranco@gmail.com" class="ct-email">
+      marianavifranco@gmail.com
+    </a>
     <div class="ct-socials">
       <a href="https://github.com/xxm4ri" target="_blank" class="ct-social">GitHub</a>
-      <a href="https://linkedin.com/in/marianafranco" target="_blank" class="ct-social">LinkedIn</a>
+      <a href="mailto:marianavifranco@gmail.com" class="ct-social">E-mail</a>
     </div>
   </div>
 </section>
@@ -800,7 +801,7 @@ footer {
 </footer>
 
 <!-- ── SCRIPTS ────────────────────────────────────────────────── -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* Cursor */
 const dot  = document.getElementById('cur-dot');
 const ring = document.getElementById('cur-ring');
@@ -849,4 +850,18 @@ const obs = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.rv').forEach(el => obs.observe(el));
 
-/*
+/* Skill bars triggered separately when skill cards appear */
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.querySelectorAll('.sk-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.sk-item').forEach(el => skillObs.observe(el));
+</script>
+</body>
+</html>
