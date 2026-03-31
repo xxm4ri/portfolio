@@ -213,23 +213,37 @@ nav.scrolled {
 .strip {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  padding: 18px 0; overflow: hidden;
+  padding: 18px 0;
+  overflow: hidden;
   background: var(--surface);
 }
 .strip-track {
-  display: flex; gap: 60px;
+  display: flex;
+  gap: 60px;
   white-space: nowrap;
   animation: marquee 22s linear infinite;
   width: max-content;
 }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 .strip-item {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .7rem; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--dim);
-  display: flex; align-items: center; gap: 12px;
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.strip-dot { width: 4px; height: 4px; background: var(--wine); border-radius: 50%; }
+.strip-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--wine);
+  border-radius: 50%;
+}
 
 /* ─── ABOUT ─────────────────────────────────────────────────── */
 #about {
@@ -252,26 +266,39 @@ nav.scrolled {
 }
 .about-headline em { font-style: italic; color: var(--wine2); }
 .about-body {
-  font-size: 1rem; line-height: 1.85;
-  color: var(--muted); margin-bottom: 24px;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 24px;
 }
-.about-body + .about-body { margin-bottom: 0; }
-.about-right { display: flex; flex-direction: column; gap: 2px; }
+.about-body + .about-body {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+.about-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .about-fact {
   padding: 24px 0;
   border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 .about-fact:first-child { border-top: 1px solid var(--border); }
 .fact-key {
-  font-size: .7rem; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--dim);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--dim);
   font-weight: 600;
 }
 .fact-val {
   font-family: 'Playfair Display', serif;
-  font-style: italic; font-size: 1.05rem;
+  font-style: italic;
+  font-size: 1.05rem;
   color: var(--rose);
 }
 
@@ -283,25 +310,31 @@ nav.scrolled {
   padding: 120px 0;
 }
 .skills-inner {
-  max-width: 1360px; margin: 0 auto;
+  max-width: 1360px;
+  margin: 0 auto;
   padding: 0 64px;
 }
 .section-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .65rem; letter-spacing: .3em;
-  text-transform: uppercase; color: var(--gold);
-  margin-bottom: 16px; display: block;
+  font-size: .65rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: block;
 }
 .section-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2.6rem, 4.5vw, 4rem);
-  font-weight: 400; line-height: 1;
-  color: var(--text); margin-bottom: 72px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 72px;
 }
 .section-title em { font-style: italic; color: var(--wine2); }
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -309,54 +342,67 @@ nav.scrolled {
 .sk-item {
   background: var(--card);
   padding: 40px 32px;
-  position: relative; overflow: hidden;
+  position: relative;
+  overflow: hidden;
   transition: background .3s;
 }
 .sk-item::before {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px; background: var(--wine);
-  transform: scaleX(0); transform-origin: left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--wine);
+  transform: scaleX(0);
+  transform-origin: left;
   transition: transform .4s ease;
 }
 .sk-item:hover { background: #1e1a1e; }
 .sk-item:hover::before { transform: scaleX(1); }
 .sk-icon {
-  font-size: 2rem; margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 20px;
   display: block;
 }
 .sk-title {
-  font-size: .95rem; font-weight: 700;
-  color: var(--text); margin-bottom: 8px;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
   letter-spacing: .02em;
 }
 .sk-sub {
-  font-size: .82rem; color: var(--dim);
-  line-height: 1.6; margin-bottom: 24px;
-}
-.sk-pct {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .75rem; color: var(--wine2);
-  margin-bottom: 10px; font-weight: 500;
+  font-size: .82rem;
+  color: var(--dim);
+  line-height: 1.6;
 }
 .sk-bar-bg {
-  height: 2px; background: var(--border2);
-  border-radius: 2px; overflow: hidden;
+  height: 2px;
+  background: var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 24px;
 }
 .sk-bar-fill {
-  height: 100%; background: linear-gradient(90deg, var(--wine), var(--rose));
-  border-radius: 2px; width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--wine), var(--rose));
+  border-radius: 2px;
+  width: 0;
   transition: width 1.2s cubic-bezier(.4,0,.2,1) .3s;
 }
 
 /* ─── PROJECTS ───────────────────────────────────────────────── */
 #projects {
-  max-width: 1360px; margin: 0 auto;
+  max-width: 1360px;
+  margin: 0 auto;
   padding: 130px 64px;
 }
 .projects-header {
-  display: flex; justify-content: space-between;
-  align-items: flex-end; margin-bottom: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 72px;
 }
 .pj-grid {
   display: grid;
@@ -370,23 +416,31 @@ nav.scrolled {
   overflow: hidden;
   position: relative;
   transition: background .3s;
+  display: flex;
+  flex-direction: column;
 }
 .pj-card:hover { background: #1a161a; }
 .pj-img-wrap {
-  height: 280px; overflow: hidden;
+  height: 320px;
+  overflow: hidden;
   position: relative;
+  flex-shrink: 0;
 }
 .pj-img-wrap::after {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background: linear-gradient(to bottom, transparent 40%, rgba(12,10,11,.8));
   z-index: 1;
+  pointer-events: none;
 }
 .pj-img-wrap img {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   transition: transform .7s cubic-bezier(.2,0,.2,1);
   filter: grayscale(20%) brightness(0.85);
+  display: block;
 }
 .pj-card:hover .pj-img-wrap img {
   transform: scale(1.06);
@@ -394,43 +448,67 @@ nav.scrolled {
 }
 .pj-body {
   padding: 36px 40px 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .pj-tags {
-  display: flex; gap: 10px;
-  margin-bottom: 20px; flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 .pj-tag {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--dim);
+  font-size: .6rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--dim);
   border: 1px solid var(--border2);
   padding: 4px 10px;
 }
 .pj-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.9rem; font-weight: 400;
-  color: var(--text); margin-bottom: 14px;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 14px;
   line-height: 1.1;
 }
 .pj-desc {
-  font-size: .92rem; line-height: 1.7;
-  color: var(--muted); margin-bottom: 32px;
+  font-size: .92rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 32px;
+  flex: 1;
 }
 .pj-footer {
-  display: flex; align-items: center;
-  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: auto;
+  gap: 20px;
 }
 .pj-link {
-  font-size: .72rem; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--rose);
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--rose);
   font-weight: 700;
-  display: flex; align-items: center; gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   transition: gap .3s, color .3s;
 }
-.pj-link:hover { gap: 14px; color: var(--blush); }
+.pj-link:hover {
+  gap: 14px;
+  color: var(--blush);
+}
 .pj-status-dot {
-  width: 7px; height: 7px;
-  background: #4ade80; border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
   box-shadow: 0 0 8px rgba(74,222,128,.5);
   animation: pulse 2s infinite;
 }
@@ -440,8 +518,12 @@ nav.scrolled {
 }
 .pj-status {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem; letter-spacing: .2em;
-  color: var(--dim); display: flex; align-items: center; gap: 8px;
+  font-size: .6rem;
+  letter-spacing: .2em;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ─── CONTACT ─────────────────────────────────────────────────── */
@@ -452,99 +534,180 @@ nav.scrolled {
   text-align: center;
 }
 .ct-inner {
-  max-width: 700px; margin: 0 auto;
+  max-width: 700px;
+  margin: 0 auto;
 }
 .ct-intro {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .65rem; letter-spacing: .35em;
-  text-transform: uppercase; color: var(--gold);
-  margin-bottom: 24px; display: block;
+  font-size: .65rem;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: block;
 }
 .ct-headline {
   font-family: 'Playfair Display', serif;
   font-size: clamp(3rem, 6vw, 5.5rem);
-  font-weight: 400; line-height: .95;
+  font-weight: 400;
+  line-height: .95;
   margin-bottom: 32px;
 }
-.ct-headline em { font-style: italic; color: var(--wine2); display: block; }
-.ct-body {
-  font-size: 1rem; color: var(--muted);
-  line-height: 1.75; margin-bottom: 56px;
-}
-.ct-email {
-  display: inline-block;
-  font-family: 'Playfair Display', serif;
+.ct-headline em {
   font-style: italic;
-  font-size: 1.3rem; color: var(--rose);
-  border-bottom: 1px solid var(--wine);
-  padding-bottom: 4px;
-  transition: color .3s, border-color .3s;
+  color: var(--wine2);
+  display: block;
+}
+.ct-body {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.75;
   margin-bottom: 56px;
 }
-.ct-email:hover { color: var(--blush); border-color: var(--rose); }
+.ct-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--rose);
+  border-bottom: 1px solid var(--wine);
+  padding-bottom: 4px;
+  transition: color .3s, border-color .3s, gap .3s;
+  margin-bottom: 56px;
+}
+.ct-email-link:hover {
+  color: var(--blush);
+  border-color: var(--rose);
+  gap: 16px;
+}
+.ct-email-link svg {
+  transition: transform .3s ease;
+}
+.ct-email-link:hover svg {
+  transform: translateX(4px);
+}
 .ct-socials {
-  display: flex; justify-content: center; gap: 32px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
 }
 .ct-social {
-  font-size: .68rem; letter-spacing: .25em;
-  text-transform: uppercase; color: var(--dim);
+  font-size: .68rem;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--dim);
   font-weight: 700;
   border: 1px solid var(--border2);
   padding: 12px 24px;
   transition: color .3s, border-color .3s;
 }
-.ct-social:hover { color: var(--rose); border-color: var(--rose); }
+.ct-social:hover {
+  color: var(--rose);
+  border-color: var(--rose);
+}
 
 /* ─── FOOTER ─────────────────────────────────────────────────── */
 footer {
   border-top: 1px solid var(--border);
   padding: 28px 64px;
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   max-width: 100%;
 }
 .ft-left {
   font-family: 'JetBrains Mono', monospace;
-  font-size: .62rem; letter-spacing: .18em;
+  font-size: .62rem;
+  letter-spacing: .18em;
   color: var(--dim);
 }
 .ft-right {
   font-family: 'Playfair Display', serif;
-  font-style: italic; font-size: .9rem;
+  font-style: italic;
+  font-size: .9rem;
   color: var(--wine);
 }
 
 /* ─── REVEAL ─────────────────────────────────────────────────── */
 .rv {
-  opacity: 0; transform: translateY(40px);
+  opacity: 0;
+  transform: translateY(40px);
   transition: opacity .8s ease, transform .8s ease;
 }
-.rv.on { opacity: 1; transform: translateY(0); }
+.rv.on {
+  opacity: 1;
+  transform: translateY(0);
+}
 .rv-delay-1 { transition-delay: .1s; }
 .rv-delay-2 { transition-delay: .2s; }
 .rv-delay-3 { transition-delay: .3s; }
 .rv-delay-4 { transition-delay: .4s; }
+.rv-delay-5 { transition-delay: .5s; }
 
 /* ─── FADE UP KEYFRAME ───────────────────────────────────────── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  #hero, #about { grid-template-columns: 1fr; gap: 60px; }
-  .hero-right { flex-direction: row; flex-wrap: wrap; }
-  .stat-block { flex: 1; min-width: 160px; }
-  .skills-grid { grid-template-columns: repeat(2, 1fr); }
-  .pj-grid { grid-template-columns: 1fr; }
-  nav, #hero, #about, #projects, #contact, footer { padding-left: 32px; padding-right: 32px; }
-  .skills-inner { padding: 0 32px; }
+  #hero, #about {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .hero-right {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .stat-block {
+    flex: 1;
+    min-width: 160px;
+  }
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pj-grid {
+    grid-template-columns: 1fr;
+  }
+  nav, #hero, #about, #projects, #contact, footer {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .skills-inner {
+    padding: 0 32px;
+  }
 }
 @media (max-width: 640px) {
-  .nav-links { display: none; }
-  .skills-grid { grid-template-columns: 1fr; }
-  .hero-ctas { flex-direction: column; align-items: flex-start; }
-  .projects-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .nav-links {
+    display: none;
+  }
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .projects-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .pj-img-wrap {
+    height: 240px;
+  }
+  .ct-email-link {
+    font-size: 1rem;
+  }
 }
 </style>
 </head>
@@ -581,10 +744,9 @@ footer {
       <em>Franco</em>
     </h1>
     <p class="hero-bio">
-      Estudante apaixonada por construir soluções reais com
-      <strong>Java, Spring Boot, MySQL e HTML</strong>.
-      Unindo lógica técnica e cuidado visual para criar
-      experiências de alto impacto.
+      Sou estudante de Desenvolvimento de Sistemas, com conhecimentos em
+      <strong>Java, Spring Boot, MySQL, HTML e JavaScript</strong>.
+      Gosto de criar projetos simples, funcionais e bem organizados, sempre buscando unir lógica e atenção aos detalhes para melhorar a experiência de quem utiliza.
     </p>
     <div class="hero-ctas">
       <a href="#projects" class="btn-primary">Ver Projetos</a>
@@ -594,24 +756,23 @@ footer {
 
   <div class="hero-right">
     <div class="stat-block">
+      <div class="stat-num">6+</div>
+      <div class="stat-label">Tecnologias</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Curiosidade</div>
+    </div>
+    <div class="stat-block">
       <div class="stat-num">100%</div>
-      <div class="stat-label">Dedicação ao Código</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">2+</div>
-      <div class="stat-label">Projetos Entregues</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">4+</div>
-      <div class="stat-label">Tecnologias Dominadas</div>
+      <div class="stat-label">Dedicação</div>
     </div>
   </div>
 </section>
 
-<!-- ── STRIP ──────────────────────────────────────────────────── -->
+<!-- ── STRIP 1 ──────────────────────────────────────────────────── -->
 <div class="strip">
   <div class="strip-track">
-    <!-- duplicado para loop contínuo -->
     <span class="strip-item"><span class="strip-dot"></span>Java</span>
     <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
     <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
@@ -620,6 +781,7 @@ footer {
     <span class="strip-item"><span class="strip-dot"></span>POO</span>
     <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
     <span class="strip-item"><span class="strip-dot"></span>Git</span>
+    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
     <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
     <span class="strip-item"><span class="strip-dot"></span>Java</span>
     <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
@@ -629,6 +791,7 @@ footer {
     <span class="strip-item"><span class="strip-dot"></span>POO</span>
     <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
     <span class="strip-item"><span class="strip-dot"></span>Git</span>
+    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
     <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
   </div>
 </div>
@@ -638,16 +801,13 @@ footer {
   <div class="about-left rv">
     <span class="about-label">01 — Sobre mim</span>
     <h2 class="about-headline">
-      Construindo com <em>propósito</em> e precisão
+      Um pouco da minha <em>jornada</em>
     </h2>
     <p class="about-body">
-      Sou estudante de Desenvolvimento de Sistemas no SENAI, com foco em back-end
-      robusto e interfaces que realmente funcionam. Cada projeto que construo
-      parte de um problema real e busca uma solução eficiente e elegante.
+      Me chamo Mariana, atualmente tenho 17 anos e sou estudante de Desenvolvimento de Sistemas no SENAI, com conhecimentos básicos em programação e desenvolvimento web. Durante o curso, venho aprendendo a trabalhar com lógica de programação, Java, JavaScript, HTML, CSS, noções de banco de dados e IOT.
     </p>
-    <p class="about-body" style="margin-top:20px;">
-      Minha abordagem combina raciocínio lógico com atenção aos detalhes visuais —
-      porque bom código e boa experiência do usuário andam juntos.
+    <p class="about-body">
+      Tenho facilidade com raciocínio lógico e gosto de entender como as coisas funcionam na prática, buscando sempre resolver problemas de forma simples e eficiente. Também me interesso pela parte visual e pela experiência do usuário, procurando equilibrar organização, clareza e funcionalidade nos projetos que desenvolvo. Estou em constante aprendizado e aberta a novas oportunidades, principalmente em áreas que envolvem tecnologia, organização e comunicação.
     </p>
   </div>
 
@@ -657,20 +817,12 @@ footer {
       <span class="fact-val">SENAI — Desenvolvimento de Sistemas</span>
     </div>
     <div class="about-fact">
-      <span class="fact-key">Foco atual</span>
-      <span class="fact-val">Back-end com Java &amp; Spring</span>
-    </div>
-    <div class="about-fact">
       <span class="fact-key">Localização</span>
-      <span class="fact-val">Brasil</span>
+      <span class="fact-val">Santa Catarina, Criciúma</span>
     </div>
     <div class="about-fact">
       <span class="fact-key">Status</span>
       <span class="fact-val">Aberta a oportunidades</span>
-    </div>
-    <div class="about-fact">
-      <span class="fact-key">Contato</span>
-      <span class="fact-val">marianavifranco@gmail.com</span>
     </div>
   </div>
 </section>
@@ -682,12 +834,10 @@ footer {
     <h2 class="section-title rv rv-delay-1">Stack &amp; <em>Ferramentas</em></h2>
 
     <div class="skills-grid">
-
       <div class="sk-item rv">
         <span class="sk-icon">☕</span>
         <div class="sk-title">Java</div>
         <div class="sk-sub">Programação orientada a objetos, estruturas de dados e integração com banco de dados.</div>
-        <div class="sk-pct">85%</div>
         <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="85"></div></div>
       </div>
 
@@ -695,7 +845,6 @@ footer {
         <span class="sk-icon" style="color:#6db33f;">🌿</span>
         <div class="sk-title">Spring Boot</div>
         <div class="sk-sub">Criação de APIs RESTful eficientes, seguras e escaláveis.</div>
-        <div class="sk-pct">75%</div>
         <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="75"></div></div>
       </div>
 
@@ -703,7 +852,6 @@ footer {
         <span class="sk-icon">🗄️</span>
         <div class="sk-title">MySQL</div>
         <div class="sk-sub">Modelagem relacional, consultas SQL otimizadas e integração com aplicações Java.</div>
-        <div class="sk-pct">70%</div>
         <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="70"></div></div>
       </div>
 
@@ -711,10 +859,22 @@ footer {
         <span class="sk-icon">🌐</span>
         <div class="sk-title">HTML &amp; CSS</div>
         <div class="sk-sub">Interfaces responsivas, semântica acessível e design com atenção aos detalhes.</div>
-        <div class="sk-pct">88%</div>
         <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="88"></div></div>
       </div>
 
+      <div class="sk-item rv rv-delay-4">
+        <span class="sk-icon">📊</span>
+        <div class="sk-title">Banco de Dados</div>
+        <div class="sk-sub">Modelagem de dados, consultas SQL, normalização e integração com aplicações.</div>
+        <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="75"></div></div>
+      </div>
+
+      <div class="sk-item rv rv-delay-5">
+        <span class="sk-icon">⚡</span>
+        <div class="sk-title">JavaScript</div>
+        <div class="sk-sub">Interatividade, manipulação de DOM, eventos e lógica assíncrona para aplicações web dinâmicas.</div>
+        <div class="sk-bar-bg"><div class="sk-bar-fill" data-w="70"></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -730,29 +890,9 @@ footer {
   </div>
 
   <div class="pj-grid">
-
     <div class="pj-card rv">
       <div class="pj-img-wrap">
-        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Livraria da Leitora">
-      </div>
-      <div class="pj-body">
-        <div class="pj-tags">
-          <span class="pj-tag">HTML</span>
-          <span class="pj-tag">Java</span>
-          <span class="pj-tag">MySQL</span>
-        </div>
-        <h3 class="pj-title">Livraria da Leitora</h3>
-        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online e interface responsiva. Back-end em Java com persistência em MySQL.</p>
-        <div class="pj-footer">
-          <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
-          <span class="pj-status"><span class="pj-status-dot"></span> Online</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="pj-card rv rv-delay-2">
-      <div class="pj-img-wrap">
-        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Casa Store">
+        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Site de Ovos de Colher">
       </div>
       <div class="pj-body">
         <div class="pj-tags">
@@ -760,17 +900,62 @@ footer {
           <span class="pj-tag">CSS</span>
           <span class="pj-tag">JavaScript</span>
         </div>
-        <h3 class="pj-title">Casa Store</h3>
-        <p class="pj-desc">Landing page sofisticada para venda de produtos gourmet, focada em conversão, UX refinado e design de alta qualidade.</p>
+        <h3 class="pj-title">Ovos de Colher</h3>
+        <p class="pj-desc">Sistema para compras de ovos de Páscoa, com catálogo interativo e carrinho de compras.</p>
+        <div class="pj-footer">
+          <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
+          <span class="pj-status"><span class="pj-status-dot"></span> Em desenvolvimento</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pj-card rv rv-delay-2">
+      <div class="pj-img-wrap">
+        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Site Livraria">
+      </div>
+      <div class="pj-body">
+        <div class="pj-tags">
+          <span class="pj-tag">HTML</span>
+          <span class="pj-tag">CSS</span>
+          <span class="pj-tag">Java</span>
+          <span class="pj-tag">MySQL</span>
+        </div>
+        <h3 class="pj-title">Livraria Online</h3>
+        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online, back-end em Java com persistência em MySQL.</p>
         <div class="pj-footer">
           <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
           <span class="pj-status"><span class="pj-status-dot"></span> Online</span>
         </div>
       </div>
     </div>
-
   </div>
 </section>
+
+<!-- ── STRIP 2 (antes do contato) ──────────────────────────────────── -->
+<div class="strip">
+  <div class="strip-track">
+    <span class="strip-item"><span class="strip-dot"></span>Java</span>
+    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
+    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
+    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
+    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
+    <span class="strip-item"><span class="strip-dot"></span>POO</span>
+    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
+    <span class="strip-item"><span class="strip-dot"></span>Git</span>
+    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
+    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
+    <span class="strip-item"><span class="strip-dot"></span>Java</span>
+    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
+    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
+    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
+    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
+    <span class="strip-item"><span class="strip-dot"></span>POO</span>
+    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
+    <span class="strip-item"><span class="strip-dot"></span>Git</span>
+    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
+    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
+  </div>
+</div>
 
 <!-- ── CONTACT ────────────────────────────────────────────────── -->
 <section id="contact">
@@ -784,45 +969,57 @@ footer {
       Disponível para novos projetos, oportunidades profissionais<br>
       e colaborações que façam a diferença.
     </p>
-    <a href="mailto:marianavifranco@gmail.com" class="ct-email">
-      marianavifranco@gmail.com
+    <a href="mailto:marianavifranco@gmail.com" class="ct-email-link">
+      <span>marianavifranco@gmail.com</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </a>
     <div class="ct-socials">
       <a href="https://github.com/xxm4ri" target="_blank" class="ct-social">GitHub</a>
-      <a href="mailto:marianavifranco@gmail.com" class="ct-social">E-mail</a>
+      <a href="https://www.linkedin.com/in/mariana-franco-b8428b286/" target="_blank" class="ct-social">LinkedIn</a>
     </div>
   </div>
 </section>
 
 <!-- ── FOOTER ─────────────────────────────────────────────────── -->
 <footer>
-  <div class="ft-left">© 2025 Mariana Franco · Todos os direitos reservados</div>
+  <div class="ft-left">© 2026 Mariana Franco · Portfólio Aura</div>
   <div class="ft-right">Feito com dedicação ✦</div>
 </footer>
 
 <!-- ── SCRIPTS ────────────────────────────────────────────────── -->
 <script>
 /* Cursor */
-const dot  = document.getElementById('cur-dot');
+const dot = document.getElementById('cur-dot');
 const ring = document.getElementById('cur-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
 
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+document.addEventListener('mousemove', e => {
+  mx = e.clientX;
+  my = e.clientY;
+});
 
 function loopCursor() {
   rx += (mx - rx) * 0.14;
   ry += (my - ry) * 0.14;
-  dot.style.left  = mx + 'px';
-  dot.style.top   = my + 'px';
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
   ring.style.left = rx + 'px';
-  ring.style.top  = ry + 'px';
+  ring.style.top = ry + 'px';
   requestAnimationFrame(loopCursor);
 }
 loopCursor();
 
 document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => { dot.classList.add('hover'); ring.classList.add('hover'); });
-  el.addEventListener('mouseleave', () => { dot.classList.remove('hover'); ring.classList.remove('hover'); });
+  el.addEventListener('mouseenter', () => {
+    dot.classList.add('hover');
+    ring.classList.add('hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    dot.classList.remove('hover');
+    ring.classList.remove('hover');
+  });
 });
 
 /* Nav scroll */
