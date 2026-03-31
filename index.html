@@ -443,14 +443,16 @@ nav.scrolled {
 .pj-img-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  object-fit: contain;
+  object-position: center;
+  background: var(--surface);
   transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1), filter 0.5s ease;
-  filter: brightness(0.9) contrast(1.05);
+  filter: brightness(0.95) contrast(1.05);
   display: block;
+  padding: 20px;
 }
 .pj-card:hover .pj-img-wrap img {
-  transform: scale(1.05);
+  transform: scale(1.02);
   filter: brightness(1) contrast(1.1);
 }
 .pj-body {
@@ -698,6 +700,9 @@ footer {
   }
   .pj-img-wrap {
     height: 260px;
+  }
+  .pj-img-wrap img {
+    padding: 12px;
   }
   .ct-email-link {
     font-size: 1rem;
