@@ -421,30 +421,37 @@ nav.scrolled {
 }
 .pj-card:hover { background: #1a161a; }
 .pj-img-wrap {
-  height: 320px;
+  height: 340px;
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
+  background: var(--surface);
 }
 .pj-img-wrap::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(12,10,11,.8));
+  background: linear-gradient(to bottom, transparent 50%, rgba(12,10,11,0.6));
   z-index: 1;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.pj-card:hover .pj-img-wrap::after {
+  opacity: 1;
 }
 .pj-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .7s cubic-bezier(.2,0,.2,1);
-  filter: grayscale(20%) brightness(0.85);
+  object-position: top center;
+  transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1), filter 0.5s ease;
+  filter: brightness(0.9) contrast(1.05);
   display: block;
 }
 .pj-card:hover .pj-img-wrap img {
-  transform: scale(1.06);
-  filter: grayscale(0%) brightness(0.95);
+  transform: scale(1.05);
+  filter: brightness(1) contrast(1.1);
 }
 .pj-body {
   padding: 36px 40px 40px;
@@ -466,6 +473,11 @@ nav.scrolled {
   color: var(--dim);
   border: 1px solid var(--border2);
   padding: 4px 10px;
+  transition: all 0.3s ease;
+}
+.pj-card:hover .pj-tag {
+  border-color: var(--wine2);
+  color: var(--rose);
 }
 .pj-title {
   font-family: 'Playfair Display', serif;
@@ -474,6 +486,10 @@ nav.scrolled {
   color: var(--text);
   margin-bottom: 14px;
   line-height: 1.1;
+  transition: color 0.3s ease;
+}
+.pj-card:hover .pj-title {
+  color: var(--wine2);
 }
 .pj-desc {
   font-size: .92rem;
@@ -487,7 +503,6 @@ nav.scrolled {
   align-items: center;
   justify-content: flex-start;
   margin-top: auto;
-  gap: 20px;
 }
 .pj-link {
   font-size: .72rem;
@@ -503,27 +518,6 @@ nav.scrolled {
 .pj-link:hover {
   gap: 14px;
   color: var(--blush);
-}
-.pj-status-dot {
-  width: 7px;
-  height: 7px;
-  background: #4ade80;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(74,222,128,.5);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(74,222,128,.5); }
-  50% { box-shadow: 0 0 16px rgba(74,222,128,.8); }
-}
-.pj-status {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem;
-  letter-spacing: .2em;
-  color: var(--dim);
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 /* ─── CONTACT ─────────────────────────────────────────────────── */
@@ -703,7 +697,7 @@ footer {
     gap: 24px;
   }
   .pj-img-wrap {
-    height: 240px;
+    height: 260px;
   }
   .ct-email-link {
     font-size: 1rem;
@@ -827,32 +821,6 @@ footer {
   </div>
 </section>
 
-<!-- ── STRIP 1 ──────────────────────────────────────────────────── -->
-<div class="strip">
-  <div class="strip-track">
-    <span class="strip-item"><span class="strip-dot"></span>Java</span>
-    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
-    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
-    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
-    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
-    <span class="strip-item"><span class="strip-dot"></span>POO</span>
-    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
-    <span class="strip-item"><span class="strip-dot"></span>Git</span>
-    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
-    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
-    <span class="strip-item"><span class="strip-dot"></span>Java</span>
-    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
-    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
-    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
-    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
-    <span class="strip-item"><span class="strip-dot"></span>POO</span>
-    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
-    <span class="strip-item"><span class="strip-dot"></span>Git</span>
-    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
-    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
-  </div>
-</div>
-
 <!-- ── SKILLS ─────────────────────────────────────────────────── -->
 <section id="skills">
   <div class="skills-inner">
@@ -905,32 +873,6 @@ footer {
   </div>
 </section>
 
-<!-- ── STRIP 1 ──────────────────────────────────────────────────── -->
-<div class="strip">
-  <div class="strip-track">
-    <span class="strip-item"><span class="strip-dot"></span>Java</span>
-    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
-    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
-    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
-    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
-    <span class="strip-item"><span class="strip-dot"></span>POO</span>
-    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
-    <span class="strip-item"><span class="strip-dot"></span>Git</span>
-    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
-    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
-    <span class="strip-item"><span class="strip-dot"></span>Java</span>
-    <span class="strip-item"><span class="strip-dot"></span>Spring Boot</span>
-    <span class="strip-item"><span class="strip-dot"></span>MySQL</span>
-    <span class="strip-item"><span class="strip-dot"></span>HTML &amp; CSS</span>
-    <span class="strip-item"><span class="strip-dot"></span>JavaScript</span>
-    <span class="strip-item"><span class="strip-dot"></span>POO</span>
-    <span class="strip-item"><span class="strip-dot"></span>REST APIs</span>
-    <span class="strip-item"><span class="strip-dot"></span>Git</span>
-    <span class="strip-item"><span class="strip-dot"></span>Banco de Dados</span>
-    <span class="strip-item"><span class="strip-dot"></span>SENAI</span>
-  </div>
-</div>
-
 <!-- ── PROJECTS ───────────────────────────────────────────────── -->
 <section id="projects">
   <div class="projects-header">
@@ -944,7 +886,7 @@ footer {
   <div class="pj-grid">
     <div class="pj-card rv">
       <div class="pj-img-wrap">
-        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Site de Ovos de Colher">
+        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Ovos de Colher - Site de vendas de ovos de Páscoa">
       </div>
       <div class="pj-body">
         <div class="pj-tags">
@@ -953,17 +895,16 @@ footer {
           <span class="pj-tag">JavaScript</span>
         </div>
         <h3 class="pj-title">Ovos de Colher</h3>
-        <p class="pj-desc">Sistema para compras de ovos de Páscoa, com catálogo interativo e carrinho de compras.</p>
+        <p class="pj-desc">Sistema para compras de ovos de Páscoa, com catálogo interativo, carrinho de compras e experiência de usuário fluida.</p>
         <div class="pj-footer">
           <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
-          <span class="pj-status"><span class="pj-status-dot"></span> Em desenvolvimento</span>
         </div>
       </div>
     </div>
 
     <div class="pj-card rv rv-delay-2">
       <div class="pj-img-wrap">
-        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Site Livraria">
+        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Livraria Online - Sistema de gerenciamento de livros">
       </div>
       <div class="pj-body">
         <div class="pj-tags">
@@ -973,10 +914,9 @@ footer {
           <span class="pj-tag">MySQL</span>
         </div>
         <h3 class="pj-title">Livraria Online</h3>
-        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online, back-end em Java com persistência em MySQL.</p>
+        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online, back-end em Java com persistência em MySQL e interface responsiva.</p>
         <div class="pj-footer">
           <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
-          <span class="pj-status"><span class="pj-status-dot"></span> Online</span>
         </div>
       </div>
     </div>
