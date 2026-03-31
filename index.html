@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ─── TOKENS (mantido igual ao anterior) ───────────────────────────────────────────────── */
+/* ─── TOKENS ───────────────────────────────────────────────── */
 :root {
   --bg:      #0c0a0b;
   --surface: #141013;
@@ -28,7 +28,7 @@
   --accent:  #9b3a55;
 }
 
-/* ─── RESET e estilos base (mantido igual ao anterior) ─────────────────────────────────── */
+/* ─── RESET ─────────────────────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 16px; }
 body {
@@ -41,7 +41,7 @@ body {
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 
-/* ─── CURSOR (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── CURSOR ─────────────────────────────────────────────────── */
 #cur-dot {
   position: fixed; width: 6px; height: 6px;
   background: var(--wine2); border-radius: 50%;
@@ -60,7 +60,7 @@ ul { list-style: none; }
 #cur-dot.hover { width: 18px; height: 18px; background: var(--rose); opacity: 0.6; }
 #cur-ring.hover { width: 60px; height: 60px; opacity: 0.15; }
 
-/* ─── LOADER (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── LOADER ─────────────────────────────────────────────────── */
 #loader {
   position: fixed; inset: 0; background: var(--bg);
   z-index: 9000; display: flex; align-items: center;
@@ -85,7 +85,7 @@ ul { list-style: none; }
 }
 @keyframes ldBar { to { transform: scaleX(1); } }
 
-/* ─── NAV (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── NAV ─────────────────────────────────────────────────────── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 300;
   display: flex; align-items: center; justify-content: space-between;
@@ -114,7 +114,7 @@ nav.scrolled {
 }
 .nav-links a:hover { color: var(--rose); }
 
-/* ─── HERO (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── HERO ─────────────────────────────────────────────────────── */
 #hero {
   min-height: 100vh;
   display: grid;
@@ -209,7 +209,7 @@ nav.scrolled {
   font-weight: 600;
 }
 
-/* ─── MARQUEE STRIP (mantido igual) ──────────────────────────────────────────── */
+/* ─── MARQUEE STRIP ──────────────────────────────────────────── */
 .strip {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -245,7 +245,7 @@ nav.scrolled {
   border-radius: 50%;
 }
 
-/* ─── ABOUT (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── ABOUT ─────────────────────────────────────────────────── */
 #about {
   max-width: 1360px; margin: 0 auto;
   padding: 130px 64px;
@@ -302,7 +302,7 @@ nav.scrolled {
   color: var(--rose);
 }
 
-/* ─── SKILLS (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── SKILLS ─────────────────────────────────────────────────── */
 #skills {
   background: var(--surface);
   border-top: 1px solid var(--border);
@@ -392,7 +392,7 @@ nav.scrolled {
   transition: width 1.2s cubic-bezier(.4,0,.2,1) .3s;
 }
 
-/* ─── PROJECTS (COM IMAGENS EM TELA CHEIA) ───────────────────────────────────────────────── */
+/* ─── PROJECTS ───────────────────────────────────────────────── */
 #projects {
   max-width: 1360px;
   margin: 0 auto;
@@ -421,37 +421,30 @@ nav.scrolled {
 }
 .pj-card:hover { background: #1a161a; }
 .pj-img-wrap {
-  height: 340px;
+  height: 320px;
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
-  background: var(--surface);
 }
 .pj-img-wrap::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, rgba(12,10,11,0.6));
+  background: linear-gradient(to bottom, transparent 40%, rgba(12,10,11,.8));
   z-index: 1;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.pj-card:hover .pj-img-wrap::after {
-  opacity: 1;
 }
 .pj-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1), filter 0.5s ease;
-  filter: brightness(0.95) contrast(1.05);
+  transition: transform .7s cubic-bezier(.2,0,.2,1);
+  filter: grayscale(20%) brightness(0.85);
   display: block;
 }
 .pj-card:hover .pj-img-wrap img {
-  transform: scale(1.05);
-  filter: brightness(1) contrast(1.1);
+  transform: scale(1.06);
+  filter: grayscale(0%) brightness(0.95);
 }
 .pj-body {
   padding: 36px 40px 40px;
@@ -473,11 +466,6 @@ nav.scrolled {
   color: var(--dim);
   border: 1px solid var(--border2);
   padding: 4px 10px;
-  transition: all 0.3s ease;
-}
-.pj-card:hover .pj-tag {
-  border-color: var(--wine2);
-  color: var(--rose);
 }
 .pj-title {
   font-family: 'Playfair Display', serif;
@@ -486,10 +474,6 @@ nav.scrolled {
   color: var(--text);
   margin-bottom: 14px;
   line-height: 1.1;
-  transition: color 0.3s ease;
-}
-.pj-card:hover .pj-title {
-  color: var(--wine2);
 }
 .pj-desc {
   font-size: .92rem;
@@ -520,7 +504,7 @@ nav.scrolled {
   color: var(--blush);
 }
 
-/* ─── CONTACT e FOOTER (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── CONTACT ─────────────────────────────────────────────────── */
 #contact {
   background: var(--surface);
   border-top: 1px solid var(--border);
@@ -602,6 +586,7 @@ nav.scrolled {
   border-color: var(--rose);
 }
 
+/* ─── FOOTER ─────────────────────────────────────────────────── */
 footer {
   border-top: 1px solid var(--border);
   padding: 28px 64px;
@@ -623,7 +608,7 @@ footer {
   color: var(--wine);
 }
 
-/* ─── REVEAL e RESPONSIVE (mantido igual) ─────────────────────────────────────────────────── */
+/* ─── REVEAL ─────────────────────────────────────────────────── */
 .rv {
   opacity: 0;
   transform: translateY(40px);
@@ -639,6 +624,7 @@ footer {
 .rv-delay-4 { transition-delay: .4s; }
 .rv-delay-5 { transition-delay: .5s; }
 
+/* ─── FADE UP KEYFRAME ───────────────────────────────────────── */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -650,6 +636,7 @@ footer {
   }
 }
 
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   #hero, #about {
     grid-template-columns: 1fr;
@@ -694,7 +681,7 @@ footer {
     gap: 24px;
   }
   .pj-img-wrap {
-    height: 260px;
+    height: 240px;
   }
   .ct-email-link {
     font-size: 1rem;
@@ -883,7 +870,7 @@ footer {
   <div class="pj-grid">
     <div class="pj-card rv">
       <div class="pj-img-wrap">
-        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Ovos de Colher - Site de vendas de ovos de Páscoa">
+        <img src="https://i.imgur.com/yJECnvw.jpeg" alt="Site de Ovos de Colher">
       </div>
       <div class="pj-body">
         <div class="pj-tags">
@@ -892,7 +879,7 @@ footer {
           <span class="pj-tag">JavaScript</span>
         </div>
         <h3 class="pj-title">Ovos de Colher</h3>
-        <p class="pj-desc">Sistema para compras de ovos de Páscoa, com catálogo interativo, carrinho de compras e experiência de usuário fluida.</p>
+        <p class="pj-desc">Sistema para compras de ovos de Páscoa, com catálogo interativo e carrinho de compras.</p>
         <div class="pj-footer">
           <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
         </div>
@@ -901,7 +888,7 @@ footer {
 
     <div class="pj-card rv rv-delay-2">
       <div class="pj-img-wrap">
-        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Livraria Online - Sistema de gerenciamento de livros">
+        <img src="https://i.imgur.com/fuxbTkg.jpeg" alt="Site Livraria">
       </div>
       <div class="pj-body">
         <div class="pj-tags">
@@ -911,7 +898,7 @@ footer {
           <span class="pj-tag">MySQL</span>
         </div>
         <h3 class="pj-title">Livraria Online</h3>
-        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online, back-end em Java com persistência em MySQL e interface responsiva.</p>
+        <p class="pj-desc">Sistema de gerenciamento de livros com catálogo online, back-end em Java com persistência em MySQL.</p>
         <div class="pj-footer">
           <a href="https://github.com/xxm4ri" target="_blank" class="pj-link">Ver Código →</a>
         </div>
@@ -977,8 +964,9 @@ footer {
   <div class="ft-right">Feito com dedicação ✦</div>
 </footer>
 
-<!-- ── SCRIPTS (mantido igual) ────────────────────────────────────────────────── -->
+<!-- ── SCRIPTS ────────────────────────────────────────────────── -->
 <script>
+/* Cursor */
 const dot = document.getElementById('cur-dot');
 const ring = document.getElementById('cur-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -1010,15 +998,18 @@ document.querySelectorAll('a, button').forEach(el => {
   });
 });
 
+/* Nav scroll */
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 60);
 });
 
+/* Loader */
 window.addEventListener('load', () => {
   setTimeout(() => document.getElementById('loader').classList.add('done'), 1400);
 });
 
+/* Reveal on scroll */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(en => {
     if (en.isIntersecting) {
@@ -1032,6 +1023,7 @@ const obs = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.rv').forEach(el => obs.observe(el));
 
+/* Skill bars triggered separately when skill cards appear */
 const skillObs = new IntersectionObserver(entries => {
   entries.forEach(en => {
     if (en.isIntersecting) {
